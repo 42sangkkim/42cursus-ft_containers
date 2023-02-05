@@ -1,354 +1,319 @@
-#ifndef FT_VECTOR_HPP
-# define FT_VECTOR_HPP
+#ifndef FT_CONTAINERS_VECTOR_VECTOR_H_
+# define FT_CONTAINERS_VECTOR_VECTOR_H_
 
 # include <memory>
-# include "./vector_iterator.hpp"
-# include "../iterator_traits.hpp"
-# include "../reverse_iterator.hpp"
-# include <cstring> // memcpy
 
 namespace ft
 {
-	template < \
-		class T, \
-		class Allocator = std::allocator<T> \
-	>
+
+	template < class T, class Allocator = std::allocator<T> >
 	class vector
 	{
-		// Iterator
-		class iterator;
-
-		// Member types
 	public:
+		// Member types
 		typedef T										value_type;
 		typedef Allocator								allocator_type;
 		typedef std::size_t								size_type;
 		typedef std::ptrdiff_t							difference_type;
-		typedef Allocator::reference					reference;
-		typedef Allocator::const_reference				const_reference;
-		typedef Allocator::pointer						pointer;
-		typedef Allocator::const_pointer				const_pointer;
-		//typedef iterator<T>								iterator;
-		//typedef iterator<T &>							const_iterator;
-		typedef ft::reverse_iterator<iterator>			reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-
-		// Member Objects
-	protected:
-		size_type					_size;
-		size_type					_capacity;
-		allocator_type				_alloc;
-		value_type					*_data;
-
-		// Member functions
-	public:
-		// Constructor
-		vector ( void ) : \
-		_size(0), \
-		_capacity(0), \
-		_data(NULL), \
-		_alloc(allocator_type())
-		{
-
-		}
-
-		explicit vector ( const allocator_type & alloc ) : \
-		_size(0), \
-		_capacity(0), \
-		_data(NULL), \
-		_alloc(alloc)
-		{
-			
-		}
-
-		explicit vector ( \
-			size_type count, \
-			const value_type & val = value_type(), \
-			const allocator_type & alloc = allocator_type() \
-		) : \
-		_size(count), \
-		_capacity(count), \
-		_data(NULL), \
-		_alloc(alloc)
-		{
-			if (count == 0)
-				return ;
-			this->reserve(count);
-			for (size_type idx = 0; idx < count; idx++)
-				this->_data[idx] = val;
-		}
-
-		template < class InputIterator >
-		vector ( \
-			InputIterator first, \
-			InputIterator last, \
-			const allocator_type & alloc = allocator_type() \
-		) : \
-		_size(last - first), \
-		_capacity(last - first), \
-		_data(NULL), \
-		_alloc(alloc)
-		{
-			if (first > last)
-				throw std::exception;
-			this->reserve(this->_size);
-			for (size_type idx = 0; idx < this->_size && first != last; idx++, first++)
-				_data[idx] = *first;
-		}
-
-		vector ( const vector & other ) : \
-		_size(other._size), \
-		_capacity(other._size), \
-		_data(NULL), \
-		_alloc(allocator_type(other.alloc))
-		{
-			this->reserve(this->_size);
-			for (size_type idx = 0; idx < this->_size; idx++)
-				this->data[idx] = other.data[idx];
-		}
-
-		// Destructor
-		~vector ( void )
-		{
-			this->clear();
-			this->_alloc.deallocate(this->_data, this->_capacity);
-			this->_data = NULL;
-		}
-
-		// Copy assignment
-		vector<value_type, allocator_type> & operator= ( const vector<value_type, allocator_type> & other )
-		{
-			if (this == *other)
-				return *this;
-			this->assign(other.begin(), other.end());
-			return *this;
-		}
-
-		void assign (size_type count, const value_type & val )
-		{
-			this->clear();
-			this->reserve(count);
-			for (size_type idx = 0; idx < count; idx++)
-				this->_data[idx] = val;
-		}
-
-		template < class InputIterator >
-		void assign ( InputIterator first, InputIterator last )
-		{
-			size_type	count = last - count;
-			this->clear();
-			this->reserve(count);
-			for (size_type idx = 0; idx < count && first != last; idx++, first++)
-				this->_data[idx] = *first;
-		}
-
-		allocator_type get_allocator ( void ) const
-		{
-			return this->_alloc;
-		}
-
-		// Element accesses
-		reference at ( size_type pos )
-		{
-			return this->_data[pos];
-		}
-
-		const_reference at ( size_type pos ) const
-		{
-			return this->_data[pos];
-		}
-
-		reference operator[] ( size_type pos )
-		{
-			return this->_data[pos];
-		}
-
-		const_reference operator[] ( size_type pos ) const
-		{
-			return this->_data[pos];
-		}
-
-		reference front ( void )
-		{
-			return this->_data[0];
-		}
-
-		const_reference front ( void ) const
-		{
-			return this->_data[0];
-		}
-
-		reference back ( void )
-		{
-			return this->_data[this->_size - 1];
-		}
-
-		const_reference back ( void ) const
-		{
-			return this->_data[this->_size - 1];
-		}
-
-		value_type * data ( void )
-		{
-			return this->_data;
-		}
-
-		const value_type * data ( void ) const
-		{
-			return this->_data;
-		}
+		typedef T &										reference;
+		typedef const T &								const_reference;
+		typedef typename Allocator::pointer				pointer;
+		typedef typename Allocator::const_pointer		const_pointer;
 
 		// Iterators
-		iterator begin ( void )
-		{
-			this->iterator(0);
-		}
+//		typedef											iterator;
+//		typedef	ft::reverse_iterator<iterator>			reverse_iterator;
+//		typedef											const_iterator;
+//		typedef ft::reverse_iterator<const_iteraotr>	const_reverse_iterator;
 
-		const_iterator begin ( void ) const;
-		iterator end ( void );
-		const_iterator end ( void ) const;
-		reverse_iterator rbegin ( void );
-		const_reverse_iterator rbegin ( void ) const;
-		reverse_iterator rend ( void );
-		const_reverse_iterator rend ( void ) const;
+	protected:
+		//	Member objects
+		pointer											_data;
+		allocator_type									_alloc;
+		size_type										_size;
+		size_type										_capacity;
 
-		// Capacity
-		bool empty ( void ) const
-		{
-			return (this->_size == 0);
-		}
+	public:
+		// Member functions
 
-		size_type size ( void ) const
-		{
-			return this->_size;
-		}
+		//		Constructor
+		vector ( void );
+		explicit vector (const allocator_type & alloc );
+		explicit vector ( size_type count, const_reference value = T(), const allocator_type & alloc = allocator_type() );
+		template < class InputIt >
+		vector ( InputIt first, InputIt last, const cllocator_type & alloc = allocator_type() );
+		vector ( const vector & other );
 
-		size_type max_size ( void ) const
-		{
-			return size_type(-1);
-		}
+		//		Destructor
+		~vector ( void );
 
-		void reserve ( size_type count )
-		{
-			if (this->_capacity >= count)
-				return ;
-			value_type	*new_data = this->_alloc.allocate(count);
-			memcpy(new_data, this->_data, sizeof(value_type) * this->_size);
-			this->_alloc.deallocate(this->_data, sizeof(this->_capacity));
-			this->_data = new_data;
-			this->_capacity = count;
-		}
+		//		Assignment operator
+		vector & operator = ( const vector & other );
+		void assign ( size_type count, const_reference value );
+//		template < class InputIt >
+//		void assign ( InputIt first, InputIt last );
 
-		size_type capacity ( void ) const
-		{
-			return this->_capacity;
-		}
+		//		Get allocator
+//		allocator_type get_allocator ( void ) const;
 
-		// Modifiers
-		void clear ( void )
-		{
-			for (size_type idx = 0; idx < this->_size; idx++)
-				this->_data[idx].~value_type;
-			this->_size = 0;
-		}
+		//		Element accesses
+		reference at ( size_type pos );
+		const_reference at ( size_type pos ) const;
+		reference operator [] ( size_type pos );
+		const_reference operator [] ( size_type pos ) const;
+		reference front ( void );
+		const_reference front ( void ) const;
+		reference back ( void );
+		const_reference back ( void ) const;
+		pointer data ( void );
+		const_pointer data ( void ) const;
 
-		iterator insert ( const_iterator pos, const value_type & val )
-		iterator insert ( const_iterator pos, size_type count, const value_type & val );
-		template < class InputIterator >
-		iterator insert ( const_iterator pos, InputIterator first, InputIterator last );
-		iterator erase ( iterator pos);
-		iterator erase ( iterator first, iterator last );
-		void push_back ( const value_type & val )
-		{
-			if (this->_capacity == 0)
-				this->reserve(1);
-			if (this->_size == this->_capacity)
-				this->reserve(this->_capacity * 2);
-			this->_data[this->_size++] = val;
-		}
+		//		Iterators
+//		iterator begin ( void );
+//		const_iterator begin ( void ) const;
+//		iterator end ( void );
+//		const_iterator end ( void ) const;
+//		reverse_iterator rbegin ( void );
+//		const_reverse_iterator rbegin ( void ) const;
+//		reverse_iterator rend ( void );
+//		const_reverse_iterator rend ( void ) const;
 
-		void pop_back ( void )
-		{
-			this->_data[this->_size--].~value_type;
-		}
+		//		Capacity
+		bool empty ( void ) const;
+		size_type size ( void ) const;
+//		size_type max_size ( void ) const;
+		void reserve ( size_type new_cap );
+		size_type capacity ( void ) const;
 
-		void resize ( size_type count, value_type val = value_type())
-		{
-			if (this->_capacity > count)
-				return ;
-			reserve(this->_capacity * 2);
-			reserve(count);
-			for (size_type idx = this->size; idx < count; idx++)
-				this->_data[idx] = val;
-			this->_size = count;
-		}
-
-		void swap ( vector & other )
-		{
-			size_type			tmp_size = this->_size;
-			size_type			tmp_capacity = this->_capacity;
-			allocator_type		tmp_alloc = this->_alloc;
-			value_type			*tmp_data = this->_data;
-			this->_size = other.size;
-			this->_capacity = other._capacity;
-			this->_alloc = other._alloc;
-			this->_data = other._data;
-			other.size = tmp_size;
-			other._capacity = tmp_capacity;
-			other._alloc = tmp_alloc;
-			other._data = tmp_data;
-		}
+		//		Modifiers
+		void clear ( void );
+//		iterator insert ( const_iterator pos, const_reference value );
+//		iterator insert ( const_iterator pos, size_type count, const_reference value );
+//		template < class InputIt >
+//		iterator insert ( const_iterator pos, InputIt first, InputIt last );
+//		iterator erase ( iterator pos );
+//		iterator erase ( iterator first, iteratoe last );
+		void push_back ( const_reference value );
+		void pop_back ( void );
+		void resize ( size_type count, value_type value = value_type() );
+//		void swap ( vector & other );
 
 	}; // class vector
 
-	// Non-member functions
-	// Relational operators
-	template < class T, class Alloc >
-	bool operator== ( const ft::vector<T, Alloc> & lhs, const ft::vector<T, Alloc> & rhs )
+
+
+
+
+
+	// Define functions
+
+	template < class T, class A >
+	vector<T, A>::vector ( void )
+		: _data(NULL), _alloc(allocator_type()), _size(0), _capacity(0)
 	{
-		if (lhs.size() != rhs.size())
-			return false;
-		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+
 	}
 
-	template < class T, class Alloc >
-	bool operator!= ( const ft::vector<T, Alloc> & lhs, const ft::vector<T, Alloc> & rhs )
+	template < class T, class A >
+	vector<T, A>::vector (const allocator_type & alloc )
+		: _data(NULL), _alloc(alloc), _size(0), _capacity(0)
 	{
-		if (lhs.size() != rhs.size())
-			return true;
-		return (!ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+
 	}
 
-	template < class T, class Alloc >
-	bool operator< ( const ft::vector<T, Alloc> & lhs, const ft::vector<T, Alloc> & rhs )
+	template < class T, class A >
+	vector<T, A>::vector ( size_type count, const_reference value, const allocator_type & alloc )
+		: _data(NULL), _alloc(alloc), _size(0), _capacity(0)
 	{
-		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+		this->reserve(count);
+		for (; this->_size != count; this->_size++)
+			this->_data[this->_size] = value;
 	}
 
-	template < class T, class Alloc >
-	bool operator<= ( const ft::vector<T, Alloc> & lhs, const ft::vector<T, Alloc> & rhs )
+	template < class T, class A, class It >
+	vector<T, A>::vector ( It first, It last, const cllocator_type & alloc )
+		: _data(NULL), _alloc(alloc), _size(0), _capacity(0)
 	{
-		return !(lhs > rhs);
+		size_type	count = 0;
+
+		for (It	it = first; it != end; it++)
+			count++;
+
+		this->reserve(count);
+		for (this->_size < count && first != last; this->_size++, first++)
+			this->_data[this->_size] = *first;
 	}
 
-	template < class T, class Alloc >
-	bool operator> ( const ft::vector<T, Alloc> & lhs, const ft::vector<T, Alloc> & rhs )
+	template < class T, class A >
+	vector<T, A>::vector ( const vector & other )
+		: _data(NULL), _alloc(other._alloc), _size(0), _capacity(0)
 	{
-		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+		*this = other;
 	}
 
-	template < class T, class Alloc >
-	bool operator>= ( const ft::vector<T, Alloc> & lhs, const ft::vector<T, Alloc> & rhs )
+	template < class T, class A >
+	vector<T, A>::~vector ( void )
 	{
-		return !(lhs < rhs);
+		this->clear();
+		this->_alloc.deallocate(this->_data, this->_capacity);
 	}
 
-	template < class T, class Alloc >
-	void swap ( ft::vector<T, Alloc> & lhs, ft::vector<T, Alloc> & rhs )
+	template < class T, class A >
+	vector<T, A> & vector<T, A>::operator = ( const vector & other )
 	{
-		lhs.swap(rhs);
+		if (this == &other)
+			return *this;
+		this->clear();
+		this->reserve(other._size);
+		for (; this->_size != other._size; this->_size++)
+			this->_data[this->_size] = other._data[this->_size];
+		return *this;
+	}
+
+	template < class T, class A >
+	void vector<T, A>::assign ( size_type count, const_reference value )
+	{
+		this->clear();
+		this->reserve(count);
+		for (; this->_size != count; this->_size++)
+			this->_data[this->_size] = value;
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::reference vector<T, A>::at ( size_type pos )
+	{
+		if (pos >= this->_size)
+			throw std::out_of_range("ft::vector");
+		return this->_data[pos];
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::const_reference vector<T, A>::at ( size_type pos ) const
+	{
+		if (pos >= this->_size)
+			throw std::out_of_range("ft::vector");
+		return this->_data[pos];
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::reference vector<T, A>::operator [] ( size_type pos )
+	{
+		return this->_data[pos];
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::const_reference vector<T, A>::operator [] ( size_type pos ) const
+	{
+		return this->_data[pos];
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::reference vector<T, A>::front ( void )
+	{
+		return this->_data[0];
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::const_reference vector<T, A>::front ( void ) const
+	{
+		return this->_data[0];
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::reference vector<T, A>::back ( void )
+	{
+		return this->_data[this->_size - 1];
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::const_reference vector<T, A>::back ( void ) const
+	{
+		return this->_data[this->_size - 1];
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::pointer vector<T, A>::data ( void )
+	{
+		return this->_data;
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::const_pointer vector<T, A>::data ( void ) const
+	{
+		return this->_data;
+	}
+
+	template < class T, class A >
+	bool vector<T, A>::empty ( void ) const
+	{
+		return this->_size == 0;
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::size_type vector<T, A>::size ( void ) const
+	{
+		return this->_size;
+	}
+
+	template < class T, class A >
+	void vector<T, A>::reserve ( size_type new_cap )
+	{
+		if (this->_capacity >= new_cap)
+			return ;
+		if (this->_capacity * 2 > new_cap)
+			new_cap = this->_capacity * 2;
+		pointer	new_data = this->_alloc.allocate(new_cap);
+		if (this->_capacity > 0)
+		{
+			memmove(new_data, this->_data, this->_size * sizeof(value_type));
+			this->_alloc.deallocate(this->_data, this->_capacity);
+		}
+		this->_capacity = new_cap;
+		this->_data = new_data;
+	}
+
+	template < class T, class A >
+	typename vector<T, A>::size_type vector<T, A>::capacity ( void ) const
+	{
+		return this->_capacity;
+	}
+
+	template < class T, class A >
+	void vector<T, A>::clear ( void )
+	{
+		for (; this->_size != 0; this->_size--)
+			this->_data[this->_size - 1].~value_type();
+	}
+
+	template < class T, class A >
+	void vector<T, A>::push_back ( const_reference value )
+	{
+		this->reserve(this->_size + 1);
+		this->_data[this->_size++] = value;
+	}
+
+	template < class T, class A >
+	void vector<T, A>::pop_back ( void )
+	{
+		this->_data[this->_size--].~value_type();
+	}
+
+	template < class T, class A >
+	void vector<T, A>::resize ( size_type count, value_type value )
+	{
+		if (this->_size < count)
+		{
+			this->reserve(count);
+			for (; this->_size != count; this->_size++)
+				this->_data[this->_size] = value;
+		}
+		else if (this->_size > count)
+		{
+			for (; this->_size != count; this->size--)
+				this->_data[this->_size - 1].~value_type();
+		}
 	}
 
 } // namespace ft
 
-#endif // FT_VECTOR_HPP
+#endif // FT_CONTAINERS_VECTOR_VECTOR_H_
