@@ -33,7 +33,7 @@ namespace ft
 		reference operator* ( void ) const;
 		pointer operator-> ( void ) const;
 
-		/* unspecified */ operator[] ( difference_type n ) const;
+		reference operator[] ( difference_type n ) const;
 
 		reverse_iterator & operator++ ( void );
 		reverse_iterator & operator++ ( int );

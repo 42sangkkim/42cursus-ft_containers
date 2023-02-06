@@ -22,7 +22,7 @@ namespace ft
 				return false;
 			else if (*first1 < *first2)
 				return true;
-			else if (*first > *first2)
+			else if (*first1 > *first2)
 				return false;
 			first1++;
 			first2++;

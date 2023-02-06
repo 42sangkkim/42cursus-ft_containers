@@ -3,19 +3,14 @@
 
 namespace ft
 {
-	template < \
-		bool Cond, \
-		typename T = void \
-	>
+	template < bool Cond, typename T = void >
 	struct enable_if;
 
-	template < \
-		typename T \
-	>
+	template < typename T >
 	struct enable_if <true, T>
 	{
 		typedef	T				type;
-	}; // struct enable_if <true, T>
+	};
 
 }; // namespace ft
 
