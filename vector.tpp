@@ -1,9 +1,11 @@
-#ifndef FT_CONTAINERS_VECTOR_HPP
-# define FT_CONTAINERS_VECTOR_HPP
+#ifndef FT_CONTAINERS_VECTOR_TPP
+# define FT_CONTAINERS_VECTOR_TPP
 
 # include "./vector.hpp"
 # include "./equal.hpp"
 # include "./lexicographical_compare.hpp"
+# include "./enable_if.hpp"
+# include "./is_integral.hpp"
 
 namespace ft
 {
@@ -31,17 +33,17 @@ namespace ft
 
 	template < class T, class A >
 	template < class InputIt >
-	vector<T, A>::vector ( InputIt first, InputIt last, const allocator_type & alloc )
+	vector<T, A>::vector ( typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type first, InputIt last, const allocator_type & alloc )
 		: _data(NULL), _alloc(alloc), _size(0), _capacity(0)
 	{
 		this->insert(this->begin(), first, last);
 	}
 
 	template < class T, class A >
-	vextor<T, A>::vector ( const vector & other )
+	vector<T, A>::vector ( const vector & other )
 		: _data(NULL), _alloc(other._alloc), _size(0), _capacity(0)
 	{
-		this->insert(this->begin(), other.first(), other.end());
+		this->insert(this->begin(), other.begin(), other.end());
 	}
 
 	template < class T, class A >
@@ -55,7 +57,7 @@ namespace ft
 	vector<T, A> & vector<T, A>::operator = ( const vector & other )
 	{
 		if (this == &other)
-			return ;
+			return *this;
 		this->clear();
 		this->insert(this->begin(), other.begin(), other.end());
 		return *this;
@@ -65,12 +67,12 @@ namespace ft
 	void vector<T, A>::assign ( size_type count, const_reference value )
 	{
 		this->clear();
-		this->insert(this->begin(), other.negin(), other.end());
+		this->insert(this->begin(), count, value);
 	}
 
 	template < class T, class A >
 	template < class InputIt >
-	void vector<T, A>::assign ( InputIt first, InputIt last )
+	typename ft::enable_if<!ft::is_integral<InputIt>::value, void>::type vector<T, A>::assign ( InputIt first, InputIt last )
 	{
 		this->clear();
 		this->insert(this->begin(), first, last);
@@ -87,7 +89,7 @@ namespace ft
 	template < class T, class A >
 	typename vector<T, A>::reference vector<T, A>::at ( size_type pos )
 	{
-		if (pos >= this->_count)
+		if (pos >= this->_size)
 			throw std::out_of_range("ft::vector");
 		return this->_data[pos];
 	}
@@ -95,7 +97,7 @@ namespace ft
 	template < class T, class A >
 	typename vector<T, A>::const_reference vector<T, A>::at ( size_type pos ) const
 	{
-		if (pos >= this->_count)
+		if (pos >= this->_size)
 			throw std::out_of_range("ft::vector");
 		return this->_data[pos];
 	}
@@ -181,19 +183,19 @@ namespace ft
 	}
 
 	template < class T, class A >
-	typename vector<T, A>::const_reverse_iterator vector<T, A>::rbegin ( void ) const;
+	typename vector<T, A>::const_reverse_iterator vector<T, A>::rbegin ( void ) const
 	{
 		return const_reverse_iterator(this->end());
 	}
 
 	template < class T, class A >
-	typename vector<T, A>::reverse_iterator vector<T, A>::rend ( void );
+	typename vector<T, A>::reverse_iterator vector<T, A>::rend ( void )
 	{
 		return reverse_iterator(this->begin());
 	}
 
 	template < class T, class A >
-	typename vector<T, A>::const_reverse_iterator vector<T, A>::rend ( void ) const;
+	typename vector<T, A>::const_reverse_iterator vector<T, A>::rend ( void ) const
 	{
 		return const_reverse_iterator(this->begin());
 	}
@@ -215,7 +217,9 @@ namespace ft
 	template < class T, class A >
 	typename vector<T, A>::size_type vector<T, A>::max_size ( void ) const
 	{
-		return std::numeric_limits<difference_type>::max();
+		size_type	size_max = std::numeric_limits<size_type>::max() / sizeof(value_type);
+		size_type	diff_max = std::numeric_limits<difference_type>::max();
+		return size_max < diff_max ? size_max : diff_max;
 	}
 
 	template < class T, class A >
@@ -249,7 +253,7 @@ namespace ft
 	void vector<T, A>::clear ( void )
 	{
 		for (; this->_size != 0; this->_size--)
-			this->_data[this->_size - 1],~value_type();
+			this->_data[this->_size - 1].~value_type();
 	}
 
 	template < class T, class A >
@@ -264,7 +268,7 @@ namespace ft
 		difference_type		idx;
 		pointer				ptr;
 
-		idx = pos - this->_begin();
+		idx = pos - this->_data;
 		this->reserve(this->_size + count);
 		ptr = this->_data + idx;
 		memmove(ptr + count, ptr, (this->_size - idx) * sizeof(value_type));
@@ -275,7 +279,7 @@ namespace ft
 
 	template < class T, class A >
 	template < class InputIt >
-	typename vector<T, A>::iterator vector<T, A>::insert ( const_iterator pos, InputIt first, InputIt last )
+	typename ft::enable_if<!ft::is_integral<InputIt>::value, typename vector<T, A>::iterator>::type vector<T, A>::insert ( const_iterator pos, InputIt first, InputIt last )
 	{
 		size_type			count;
 		difference_type		idx;
@@ -284,12 +288,12 @@ namespace ft
 		count = 0;
 		for (InputIt it(first); it != last; it++)
 			count++;
-		idx = pos - this->_begin();
+		idx = pos - this->_data;
 		this->reserve(this->_size + count);
 		ptr = this->_data + idx;
 		memmove(ptr + count, ptr, (this->_size - idx) * sizeof(value_type));
-		for (InputIt it(first); it != last; it++, this->_size++)
-			this->_data[idx++] = *it;
+		for (; first != last; first++, this->_size++)
+			this->_data[idx++] = value_type(*first);
 		return iterator(this->_data + idx - 1);
 	}
 
@@ -302,9 +306,13 @@ namespace ft
 	template < class T, class A >
 	typename vector<T, A>::iterator vector<T, A>::erase ( iterator first, iterator last )
 	{
-		for (const_iterator it(first); it != last; it++, this->_size--)
+		size_type	count;
+
+		count = 0;
+		for (const_iterator it(first); it != last; it++, count++)
 			(*it).~value_type();
-		memmove(first, last, (this->end() - last) * size_of(value_type));
+		memmove(first, last, (this->end() - last) * sizeof(value_type));
+		this->_size -= count;
 		return (first);
 	}
 
@@ -354,47 +362,47 @@ namespace ft
 	//	Non-member functions
 
 	template < class T, class A >
-	bool operator == ( const ft:vector<T, A> & lhs, const ft::vector<T, A> & rhs )
+	bool operator == ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs )
 	{
-		return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+		return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 
 	template < class T, class A >
-	bool operator != ( const ft:vector<T, A> & lhs, const ft::vector<T, A> & rhs )
+	bool operator != ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs )
 	{
 		return !(lhs == rhs);
 	}
 
 	template < class T, class A >
-	bool operator < ( const ft:vector<T, A> & lhs, const ft::vector<T, A> & rhs )
+	bool operator < ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs )
 	{
 		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}
 
 	template < class T, class A >
-	bool operator > ( const ft:vector<T, A> & lhs, const ft::vector<T, A> & rhs )
+	bool operator > ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs )
 	{
 		return ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end());
 	}
 
 	template < class T, class A >
-	bool operator <= ( const ft:vector<T, A> & lhs, const ft::vector<T, A> & rhs )
+	bool operator <= ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs )
 	{
 		return !(lhs > rhs);
 	}
 
 	template < class T, class A >
-	bool operator >= ( const ft:vector<T, A> & lhs, const ft::vector<T, A> & rhs )
+	bool operator >= ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs )
 	{
 		return !(lhs < rhs);
 	}
 
 	template < class T, class A >
-	void swap ( ft:vector<T, A> & lhs, ft::vector<T, A> & rhs )
+	void swap ( ft::vector<T, A> & lhs, ft::vector<T, A> & rhs )
 	{
 		lhs.swap(rhs);
 	}
 
 } // namespace ft
 
-#endif // FT_CONTAINERS_VECTOR_HPP
+#endif // FT_CONTAINERS_VECTOR_TPP

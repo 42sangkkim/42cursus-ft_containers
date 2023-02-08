@@ -8,7 +8,7 @@ namespace ft
 	{
 		for (; first1 != last1; first1++, first2++)
 		{
-			if (*first != *first2)
+			if (*first1 != *first2)
 				return false;
 		}
 		return true;
@@ -19,7 +19,7 @@ namespace ft
 	{
 		for (; first1 != last1; first1++, first2++)
 		{
-			if (!p(*first, *first2))
+			if (!p(*first1, *first2))
 				return false;
 		}
 		return true;

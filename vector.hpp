@@ -3,6 +3,8 @@
 
 # include <memory>
 # include "./reverse_iterator.hpp"
+# include "./enable_if.hpp"
+# include "./is_integral.hpp"
 
 namespace ft
 {
@@ -41,13 +43,13 @@ namespace ft
 		explicit vector (const allocator_type & alloc );
 		explicit vector ( size_type count, const_reference value = T(), const allocator_type & alloc = allocator_type() );
 		template < class InputIt >
-		vector ( InputIt first, InputIt last, const allocator_type & alloc = allocator_type() );
+		vector ( typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type first, InputIt last, const allocator_type & alloc = allocator_type() );
 		vector ( const vector & other );
 		~vector ( void );
 		vector & operator = ( const vector & other );
 		void assign ( size_type count, const_reference value );
 		template < class InputIt >
-		void assign ( InputIt first, InputIt last );
+		typename ft::enable_if<!ft::is_integral<InputIt>::value, void>::type assign ( InputIt first, InputIt last );
 		allocator_type get_allocator ( void ) const;
 
 		//		Element accesses
@@ -84,7 +86,7 @@ namespace ft
 		iterator insert ( const_iterator pos, const_reference value );
 		iterator insert ( const_iterator pos, size_type count, const_reference value );
 		template < class InputIt >
-		iterator insert ( const_iterator pos, InputIt first, InputIt last );
+		typename ft::enable_if<!ft::is_integral<InputIt>::value, iterator>::type insert ( const_iterator pos, InputIt first, InputIt last );
 		iterator erase ( iterator pos );
 		iterator erase ( iterator first, iterator last );
 		void push_back ( const_reference value );

@@ -1,19 +1,26 @@
 #ifndef FT_CONTAINERS_RESERSE_ITERATOR_HPP
 # define FT_CONTAINERS_RESERSE_ITERATOR_HPP
 
+# include "./iterator_traits.hpp"
+
 namespace ft
 {
 	template < class Iter >
-	class reverse_iteratori : public std::iterator < 
-			ft::iterator_traits<Iter>::difference_type, 
-			ft::iterator_traits<Iter>::value_type, 
-			ft::iterator_traits<Iter>::pointer, 
-			ft::iterator_traits<Iter>::reference, 
-			ft::iterator_traits<Iter>::iterator_category >
+	class reverse_iterator : public std::iterator < 
+			typename ft::iterator_traits<Iter>::difference_type, 
+			typename ft::iterator_traits<Iter>::value_type, 
+			typename ft::iterator_traits<Iter>::pointer, 
+			typename ft::iterator_traits<Iter>::reference, 
+			typename ft::iterator_traits<Iter>::iterator_category >
 	{
 		public:
 			// Member types
 			typedef Iter													iterator_type;
+			typedef typename ft::iterator_traits<Iter>::difference_type		difference_type;
+			typedef typename ft::iterator_traits<Iter>::value_type			value_type;
+			typedef typename ft::iterator_traits<Iter>::pointer				pointer;
+			typedef typename ft::iterator_traits<Iter>::reference			reference;
+			typedef typename ft::iterator_traits<Iter>::iterator_category	iterator_category;
 
 		protected:
 			// Member objects
@@ -23,11 +30,12 @@ namespace ft
 			// Member functions
 			// (Constructor)
 			reverse_iterator ( void );
-			ecplicit reverse_iterator ( iterator_type x );
+			explicit reverse_iterator ( iterator_type x );
 			template < class U >
-			reverse_iterator ( const reverse_iterator < U > & other );
+			reverse_iterator ( const reverse_iterator<U> & other );
 
-			reverse_iterator & operator = ( const reverse_iterator < U > & other );
+			template < class U >
+			reverse_iterator & operator = ( const reverse_iterator<U> & other );
 
 			iterator_type base ( void ) const;
 
