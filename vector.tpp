@@ -255,32 +255,57 @@ namespace ft
 	template < class T, class A >
 	typename vector<T, A>::iterator vector<T, A>::insert ( const_iterator pos, const_reference value )
 	{
-		// TODO
+		return (this->insert(pos, 1, value));
 	}
 
 	template < class T, class A >
 	typename vector<T, A>::iterator vector<T, A>::insert ( const_iterator pos, size_type count, const_reference value )
 	{
-		// TODO
+		difference_type		idx;
+		pointer				ptr;
+
+		idx = pos - this->_begin();
+		this->reserve(this->_size + count);
+		ptr = this->_data + idx;
+		memmove(ptr + count, ptr, (this->_size - idx) * sizeof(value_type));
+		for (; count != 0 ; count--, this->_size++)
+			this->_data[idx++] = value;
+		return iterator(this->_data + idx - 1);
 	}
 
 	template < class T, class A >
 	template < class InputIt >
 	typename vector<T, A>::iterator vector<T, A>::insert ( const_iterator pos, InputIt first, InputIt last )
 	{
-		// TODO
+		size_type			count;
+		difference_type		idx;
+		pointer				ptr;
+
+		count = 0;
+		for (InputIt it(first); it != last; it++)
+			count++;
+		idx = pos - this->_begin();
+		this->reserve(this->_size + count);
+		ptr = this->_data + idx;
+		memmove(ptr + count, ptr, (this->_size - idx) * sizeof(value_type));
+		for (InputIt it(first); it != last; it++, this->_size++)
+			this->_data[idx++] = *it;
+		return iterator(this->_data + idx - 1);
 	}
 
 	template < class T, class A >
 	typename vector<T, A>::iterator vector<T, A>::erase ( iterator pos )
 	{
-		// TODO
+		return this->erase(pos, pos + 1);
 	}
 
 	template < class T, class A >
 	typename vector<T, A>::iterator vector<T, A>::erase ( iterator first, iterator last )
 	{
-		// TODO
+		for (const_iterator it(first); it != last; it++, this->_size--)
+			(*it).~value_type();
+		memmove(first, last, (this->end() - last) * size_of(value_type));
+		return (first);
 	}
 
 	template < class T, class A >
