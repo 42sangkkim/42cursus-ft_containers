@@ -76,6 +76,11 @@ namespace ft
 			Node * erase ( Node * target );
 			void clear ( void );
 
+			Node * begin ( void );
+			const Node * begin ( void ) const;
+			Node * end ( void );
+			const Node * end ( void ) const;
+
 			Node * lower_bound ( const key_type & key );
 			const Node * lower_bound ( const key_type & key ) const;
 			Node * upper_bound ( const key_type & key );

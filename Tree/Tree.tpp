@@ -304,6 +304,30 @@ namespace ft
 	}
 
 	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::begin ( void )
+	{
+		return this->_nil->_child[RIGHT];
+	}
+
+	template < class K, class T, class C, class A >
+	const typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::begin ( void ) const
+	{
+		return this->_nil->_child[RIGHT];
+	}
+
+	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::end ( void )
+	{
+		return this->_nil->_child[LEFT];
+	}
+
+	template < class K, class T, class C, class A >
+	const typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::end ( void ) const
+	{
+		return this->_nil->_child[LEFT];
+	}
+
+	template < class K, class T, class C, class A >
 	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::lower_bound ( const key_type & key )
 	{
 		if (this->_size == 0)
