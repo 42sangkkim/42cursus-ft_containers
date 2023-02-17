@@ -328,6 +328,12 @@ namespace ft
 	}
 
 	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::size_type ft::Tree<K, T, C, A>::size ( void ) const
+	{
+		return this->_size;
+	}
+
+	template < class K, class T, class C, class A >
 	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::lower_bound ( const key_type & key )
 	{
 		if (this->_size == 0)

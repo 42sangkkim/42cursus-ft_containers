@@ -81,6 +81,8 @@ namespace ft
 			Node * end ( void );
 			const Node * end ( void ) const;
 
+			size_type size ( void ) const;
+
 			Node * lower_bound ( const key_type & key );
 			const Node * lower_bound ( const key_type & key ) const;
 			Node * upper_bound ( const key_type & key );

@@ -47,33 +47,7 @@ namespace ft
 
 			}; // class value_compare
 
-			class RBnode
-			{
-				private:
-					value_type									_value;
-					//e_color										_color;
-					RBnode *									_parent;
-					RBnode *									_child[2];
-
-				public:
-					RBnode ( void );
-					RBnode ( value_type value );
-					RBnode ( const RBnode & other );
-
-					~RBnode ( void );
-
-					RBnode & operator = ( const RBnode & other );
-
-					value_type & getValue ( void );
-					const value_type & getValue ( void ) const;
-
-			};
-
-			// Member objects
-			RBnode *										_root;
-			RBnode * 										_begin;
-			RBnode *										_end;
-			size_type										_size;
+			Tree<Key, T, Compare, Allocator>					_tree;
 
 			// Member functions
 			map ( void );
