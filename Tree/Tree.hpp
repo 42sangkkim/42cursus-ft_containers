@@ -2,13 +2,22 @@
 # define FT_CONTAINERS_TREE_HPP
 
 # include <memory>
-#include <iostream> // TODO :delete
+# include "../pair.hpp"
 
 namespace ft
 {
+	template < class Key, class T >
 	class Tree
 	{
 		public:
+			typedef Key										key_type;
+			typedef T										mapped_type;
+			typedef ft::pair<Key, T>						value_type;
+			typedef value_type &							reference;
+			typedef const value_type &						const_reference;
+			typedef value_type *							pointer; // TODO : Allocator
+			typedef const value_type *						const_pointer; // TODO : Allocator
+
 			enum dir_t
 			{
 				LEFT = 0,
@@ -18,18 +27,18 @@ namespace ft
 			class Node
 			{
 				public:
-					int					_value;
-					Node *				_parent;
-					Node *				_child[2];
+					value_type				_value;
+					Node *					_parent;
+					Node *					_child[2];
 
 				private:
 					// Never using
-					Node ( void );
 					Node ( const Node & other );
 					Node & operator = ( const Node & other );
 
 				public:
-					Node ( int value );
+					Node ( void );
+					Node ( const value_type & value );
 					~Node ( void );
 
 					Node * prev ( void );
@@ -54,27 +63,16 @@ namespace ft
 			Tree ( void );
 			~Tree ( void );
 
-			Node * find ( int value );
-			const Node * find ( int value ) const;
-			Node * insert ( int value );
+			Node * find ( const key_type & key );
+			const Node * find ( const key_type & key ) const;
+			Node * insert ( const value_type & value );
 			Node * erase ( Node * target );
 			void clear ( void );
 
-			 Node * lower_bound ( int value );
-			 Node * upper_bound ( int value );
-
-			void print_all(void)
-			{
-				print(this->_root);
-			}
-			void print(Node * target)
-			{
-				if (target->_child[LEFT] != NULL)
-					print(target->_child[LEFT]);
-				std::cout << target->_value << ", ";
-				if (target->_child[RIGHT] != NULL)
-					print(target->_child[RIGHT]);
-			}
+			Node * lower_bound ( const key_type & key );
+			const Node * lower_bound ( const key_type & key ) const;
+			Node * upper_bound ( const key_type & key );
+			const Node * upper_bound ( const key_type & key ) const;
 
 		protected:
 			void destroy ( Node * target );

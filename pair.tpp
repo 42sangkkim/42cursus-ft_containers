@@ -29,7 +29,7 @@ namespace ft
 	}
 
 	template < class T1, class T2 >
-	pair & pair<T1, T2>::operator = ( const pair & other )
+	typename ft::pair<T1, T2> & pair<T1, T2>::operator = ( const pair & other )
 	{
 		this->first = other.first;
 		this->second = other.second;
@@ -39,7 +39,7 @@ namespace ft
 	// Non-member functions
 
 	template < class T1, class T2 >
-	ft::pair<T1, T2> make_pair( T1 t, T2 u )
+	typename ft::pair<T1, T2> make_pair( T1 t, T2 u )
 	{
 		return ft::pair<T1, T2>(t, u);
 	}
