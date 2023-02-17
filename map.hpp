@@ -58,14 +58,14 @@ namespace ft
 				public:
 					RBnode ( void );
 					RBnode ( value_type value );
-					RBnode ( const RBnode * other );
+					RBnode ( const RBnode & other );
 
 					~RBnode ( void );
 
 					RBnode & operator = ( const RBnode & other );
 
 					value_type & getValue ( void );
-					const value_type get_value ( void ) const;
+					const value_type & getValue ( void ) const;
 
 			};
 

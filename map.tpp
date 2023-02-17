@@ -22,21 +22,77 @@ namespace ft
 		return comp(lhs, rhs);
 	}
 
-	// Member functions
+	// RBnode
 	template < class K, class T, class C, class A >
-	ft::map<K, T, C, A>::map ( void ); // TODO
+	ft::map<K, T, C, A>::RBnode::RBnode ( void )
+		: _value(), _parent(NULL), _child({NULL, NULL})
+	{}
 
 	template < class K, class T, class C, class A >
-	ft::map<K, T, C, A>::map ( const key_compare & comp, const allocator_type & alloc = allocator_type() ); // TODO
+	ft::map<K, T, C, A>::RBnode::RBnode ( value_type value )
+		: _value(value), _parent(NULL), _child({NULL, NULL})
+	{}
+
+	template < class K, class T, class C, class A >
+	ft::map<K, T, C, A>::RBnode::RBnode ( const RBnode & other )
+		: _value(other._value), _parent(other._parent), _child(other._child)
+	{}
+
+	template < class K, class T, class C, class A >
+	ft::map<K, T, C, A>::RBnode::~RBnode ( void )
+	{}
+
+	template < class K, class T, class C, class A >
+	ft::map<K, T, C, A>::RBnode & ft::map<K, T, C, A>::RBnode::operator = ( const RBnode & other )
+	{
+		this->_value = other._value;
+		this->_parent = other._parent;
+		this->_child[LEFT] = other._child[LEFT];
+		this->_child[RIGHT] = other._child[RIGHT];
+	}
+
+	template < class K, class T, class C, class A >
+	ft::pair<const K, T> & ft::map<K, T, C, A>::RBnode::getValue ( void )
+	{
+		return this->_value;
+	}
+
+	template < class K, class T, class C, class A >
+	const ft::pair<const K, T> & ft::map<K, T, C, A>::RBnode::getValue ( void ) const
+	{
+		return this->_value;
+	}
+
+	// Member functions
+	template < class K, class T, class C, class A >
+	ft::map<K, T, C, A>::map ( void )
+		: // TODO
+	{
+		// TODO
+	}
+
+	template < class K, class T, class C, class A >
+	ft::map<K, T, C, A>::map ( const key_compare & comp, const allocator_type & alloc = allocator_type() )
+		: // TODO
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
 	template < class InputIt >
-	ft::map<K, T, C, A>::map ( InputIt first, InputIt last, const allocator_type & alloc = allocator_type() ); // TODO
+	ft::map<K, T, C, A>::map ( InputIt first, InputIt last, const allocator_type & alloc = allocator_type() )
+		: // TODO
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	ft::map<K, T, C, A>::map ( const map & other ); // TODO
+	ft::map<K, T, C, A>::map ( const map & other )
+		: // TODO
+	{
+		// TODO
+	}
 
-	
 	template < class K, class T, class C, class A >
 	ft::map<K, T, C, A>::~map ( void )
 	{
@@ -44,7 +100,10 @@ namespace ft
 	}
 
 	template < class K, class T, class C, class A >
-	map & ft::map<K, T, C, A>::operator = ( const map & other ); // TODO
+	ft::map<K, T, C, A> & ft::map<K, T, C, A>::operator = ( const map & other )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
 	A ft::map<K, T, C, A>::get_allocator ( void ) const
@@ -54,44 +113,77 @@ namespace ft
 
 	// Element accesses
 	template < class K, class T, class C, class A >
-	T & ft::map<K, T, C, A>::at ( const key_type & key );				// std::out_of_range // TODO
+	T & ft::map<K, T, C, A>::at ( const key_type & key )				// std::out_of_range
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	const T & ft::map<K, T, C, A>::at ( const key_type & key ) const;	// std::out_of_range // TODO
+	const T & ft::map<K, T, C, A>::at ( const key_type & key ) const	// std::out_of_range
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	T & ft::map<K, T, C, A>::operator [] (const key_type & key ); // TODO
+	T & ft::map<K, T, C, A>::operator [] (const key_type & key )
+	{
+		// TODO
+	}
 
 	// iterators
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::begin ( void ); // TODO
+	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::begin ( void )
+	{
+		return iterator(this->_begin);
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::begin ( void ) const; // TODO
+	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::begin ( void ) const
+	{
+		return const_iterator(this->_begin);
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::end ( void ); // TODO
+	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::end ( void )
+	{
+		return iterator(this->_end);
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::end ( void ) const; // TODO
+	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::end ( void ) const
+	{
+		return const_iterator(this->_end);
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::reverse_iterator ft::map<K, T, C, A>::rbegin ( void ); // TODO
+	typename ft::map<K, T, C, A>::reverse_iterator ft::map<K, T, C, A>::rbegin ( void )
+	{
+		return reverse_iterator(this->_end);
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::const_reverse_iterator ft::map<K, T, C, A>::rbegin ( void ) const; // TODO
+	typename ft::map<K, T, C, A>::const_reverse_iterator ft::map<K, T, C, A>::rbegin ( void ) const
+	{
+		return const_reverse_iterator(this->_end);
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::reverse_iterator ft::map<K, T, C, A>::rend ( void ); // TODO
+	typename ft::map<K, T, C, A>::reverse_iterator ft::map<K, T, C, A>::rend ( void )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::const_reverse_iterator ft::map<K, T, C, A>::rend ( void ) const; // TODO
+	typename ft::map<K, T, C, A>::const_reverse_iterator ft::map<K, T, C, A>::rend ( void ) const
+	{
+		// TODO
+	}
 
 	// Capacity
 	template < class K, class T, class C, class A >
 	bool ft::map<K, T, C, A>::empty ( void ) const
 	{
-		return this->_size == 0;
+		return (this->_size == 0);
 	}
 
 	template < class K, class T, class C, class A >
@@ -110,64 +202,117 @@ namespace ft
 
 	// Modifiers
 	template < class K, class T, class C, class A >
-	void ft::map<K, T, C, A>::clear ( void ); // TODO
+	void ft::map<K, T, C, A>::clear ( void )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	ft::pair<iterator, bool> ft::map<K, T, C, A>::insert ( const value_type & value ); // TODO
+	ft::pair<iterator, bool> ft::map<K, T, C, A>::insert ( const value_type & value )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::insert ( iterator pos, const value_type & value ); // TODO
+	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::insert ( iterator pos, const value_type & value )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
 	template < class InputIt >
-	void ft::map<K, T, C, A>::insert ( InputIt first, InputIt last ); // TODO
+	void ft::map<K, T, C, A>::insert ( InputIt first, InputIt last )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::erase ( iterator pos ); // TODO
+	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::erase ( iterator pos )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::erase ( iterator first, iterator last ); // TODO
+	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::erase ( iterator first, iterator last )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	size_t ft::map<K, T, C, A>::erase ( const key_type & key ); // TODO
+	size_t ft::map<K, T, C, A>::erase ( const key_type & key )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	void ft::map<K, T, C, A>::swap ( map & other ); // TODO
+	void ft::map<K, T, C, A>::swap ( map & other )
+	{
+		// TODO
+	}
 
 	// Lookup
 	template < class K, class T, class C, class A >
-	size_t ft::map<K, T, C, A>::count ( const key_type & key ) const; // TODO
+	size_t ft::map<K, T, C, A>::count ( const key_type & key ) const
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::find ( const key_type & key ); // TODO
+	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::find ( const key_type & key )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::find ( const key_type & key ) const; // TODO
+	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::find ( const key_type & key ) const
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	ft::pair<iterator, iterator> ft::map<K, T, C, A>::equal_range ( const key_type & key ); // TODO
+	ft::pair<iterator, iterator> ft::map<K, T, C, A>::equal_range ( const key_type & key )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	ft::pair<const_iterator, const_iterator> ft::map<K, T, C, A>::equal_range ( const key_type & key ) const; // TODO
+	ft::pair<const_iterator, const_iterator> ft::map<K, T, C, A>::equal_range ( const key_type & key ) const
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::lower_bound ( const key_type & key ); // TODO
+	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::lower_bound ( const key_type & key )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::lower_bound ( const key_type & key ) const; // TODO
+	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::lower_bound ( const key_type & key ) const
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::upper_bound ( const key_type & key ); // TODO
+	typename ft::map<K, T, C, A>::iterator ft::map<K, T, C, A>::upper_bound ( const key_type & key )
+	{
+		// TODO
+	}
 
 	template < class K, class T, class C, class A >
-	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::upper_bound ( const key_type & key ) const; // TODO
+	typename ft::map<K, T, C, A>::const_iterator ft::map<K, T, C, A>::upper_bound ( const key_type & key ) const
+	{
+		// TODO
+	}
 
 	// Observers
+	template < class K, class T, class C, class A >
 	typename ft::map<K, T, C, A>::key_compare ft::map<K, T, C, A>::key_comp ( void ) const
 	{
 		return key_compare();
 	}
 
+	template < class K, class T, class C, class A >
 	typename ft::map<K, T, C, A>::value_compare ft::map<K, T, C, A>::value_comp ( void ) const
 	{
 		return value_compare();
