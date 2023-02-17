@@ -2,21 +2,25 @@
 # define FT_CONTAINERS_TREE_HPP
 
 # include <memory>
-# include "../pair.hpp"
+# include "../pair.hpp" // TODO : change direction
 
 namespace ft
 {
-	template < class Key, class T >
+	template < class Key, class T, class Compare, class Allocator >
 	class Tree
 	{
 		public:
 			typedef Key										key_type;
 			typedef T										mapped_type;
 			typedef ft::pair<Key, T>						value_type;
+			typedef std::size_t								size_type;
+			typedef std::ptrdiff_t							difference_type;
+			typedef Compare									key_compare;
+			typedef Allocator								allocator_type;
 			typedef value_type &							reference;
 			typedef const value_type &						const_reference;
-			typedef value_type *							pointer; // TODO : Allocator
-			typedef const value_type *						const_pointer; // TODO : Allocator
+			typedef typename Allocator::pointer				pointer;
+			typedef typename Allocator::const_pointer		const_pointer;
 
 			enum dir_t
 			{
@@ -33,13 +37,14 @@ namespace ft
 
 				private:
 					// Never using
-					Node ( const Node & other );
-					Node & operator = ( const Node & other );
 
 				public:
 					Node ( void );
-					Node ( const value_type & value );
+					Node ( const Node & other );
+					Node ( const_reference value );
 					~Node ( void );
+
+					Node & operator = ( const Node & other );
 
 					Node * prev ( void );
 					const Node * prev ( void ) const;
@@ -49,10 +54,12 @@ namespace ft
 			}; // class Node
 
 		protected:
-			Node						__NIL_NODE__;
-			Node *						_nil;
-			Node *						_root;
-			std::size_t					_size;
+			Node													__NIL_NODE__;
+			Node *													_nil;
+			Node *													_root;
+			size_type												_size;
+			key_compare												_comp;
+			typename allocator_type::template rebind<Node>::other	_alloc;
 
 		private:
 			// Never using
@@ -65,7 +72,7 @@ namespace ft
 
 			Node * find ( const key_type & key );
 			const Node * find ( const key_type & key ) const;
-			Node * insert ( const value_type & value );
+			Node * insert ( const_reference value );
 			Node * erase ( Node * target );
 			void clear ( void );
 

@@ -7,28 +7,46 @@ namespace ft
 {
 	// Node
 
-	template < class K, class T >
-	ft::Tree<K, T>::Node::Node ( void )
-		: _value(), _parent(NULL)
+	template < class K, class T, class C, class A >
+	ft::Tree<K, T, C, A>::Node::Node ( void )
+		: _value(value_type()), _parent(NULL)
 	{
 		this->_child[LEFT] = NULL;
 		this->_child[RIGHT] = NULL;
 	}
 
-	template < class K, class T >
-	ft::Tree<K, T>::Node::Node ( const value_type & value )
+	template < class K, class T, class C, class A >
+	ft::Tree<K, T, C, A>::Node::Node ( const Node & other )
+		: _value(other._value), _parent(other._parent)
+	{
+		this->_child[LEFT] = other._child[LEFT];
+		this->_child[RIGHT] = other._child[RIGHT];
+	}
+
+	template < class K, class T, class C, class A >
+	ft::Tree<K, T, C, A>::Node::Node ( const_reference value )
 		: _value(value), _parent(NULL)
 	{
 		this->_child[LEFT] = NULL;
 		this->_child[RIGHT] = NULL;
 	}
 
-	template < class K, class T >
-	ft::Tree<K, T>::Node::~Node ( void )
+	template < class K, class T, class C, class A >
+	ft::Tree<K, T, C, A>::Node::~Node ( void )
 	{}
 
-	template < class K, class T >
-	typename ft::Tree<K, T>::Node * ft::Tree<K, T>::Node::prev ( void )
+	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node & ft::Tree<K, T, C, A>::Node::operator = ( const Node & other )
+	{
+		this->_value = other._value;
+		this->_parent = other._parent;
+		this->_child[LEFT] = other._child[LEFT];
+		this->_child[RIGHT] = other._child[RIGHT];
+		return *this;
+	}
+
+	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::Node::prev ( void )
 	{
 		Node * cur = this;
 
@@ -51,8 +69,8 @@ namespace ft
 		}
 	}
 
-	template < class K, class T >
-	const typename ft::Tree<K, T>::Node * ft::Tree<K, T>::Node::prev ( void ) const
+	template < class K, class T, class C, class A >
+	const typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::Node::prev ( void ) const
 	{
 		const Node * cur = this;
 
@@ -75,8 +93,8 @@ namespace ft
 		}
 	}
 
-	template < class K, class T >
-	typename ft::Tree<K, T>::Node * ft::Tree<K, T>::Node::next ( void )
+	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::Node::next ( void )
 	{
 		Node * cur = this;
 
@@ -99,8 +117,8 @@ namespace ft
 		}
 	}
 
-	template < class K, class T >
-	const typename ft::Tree<K, T>::Node * ft::Tree<K, T>::Node::next ( void ) const
+	template < class K, class T, class C, class A >
+	const typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::Node::next ( void ) const
 	{
 		const Node * cur = this;
 
@@ -125,22 +143,22 @@ namespace ft
 
 	// Tree
 
-	template < class K, class T >
-	ft::Tree<K, T>::Tree ( void )
-		: __NIL_NODE__(), _nil(&this->__NIL_NODE__), _root(&this->__NIL_NODE__), _size(0)
+	template < class K, class T, class C, class A >
+	ft::Tree<K, T, C, A>::Tree ( void )
+		: __NIL_NODE__(), _nil(&this->__NIL_NODE__), _root(&this->__NIL_NODE__), _size(0), _comp(key_compare()), _alloc()
 	{
 		this->__NIL_NODE__._child[LEFT] = this->_nil;
 		this->__NIL_NODE__._child[RIGHT] = this->_nil;
 	}
 
-	template < class K, class T >
-	ft::Tree<K, T>::~Tree ( void )
+	template < class K, class T, class C, class A >
+	ft::Tree<K, T, C, A>::~Tree ( void )
 	{
 		this->clear();
 	}
 
-	template < class K, class T >
-	typename ft::Tree<K, T>::Node * ft::Tree<K, T>::find ( const key_type & key )
+	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::find ( const key_type & key )
 	{
 		if (this->_size == 0)
 			return this->_nil;
@@ -148,9 +166,9 @@ namespace ft
 		Node * cur = this->_root;
 		while (cur != NULL)
 		{
-			if (cur->_value.first < key)
+			if (this->_comp(cur->_value.first, key))
 				cur = cur->_child[RIGHT];
-			else if (key < cur->_value.first)
+			else if (this->_comp(key, cur->_value.first))
 				cur = cur->_child[LEFT];
 			else
 				return cur;
@@ -158,8 +176,8 @@ namespace ft
 		return this->_nil;
 	}
 
-	template < class K, class T >
-	const typename ft::Tree<K, T>::Node * ft::Tree<K, T>::find ( const key_type & key ) const
+	template < class K, class T, class C, class A >
+	const typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::find ( const key_type & key ) const
 	{
 		if (this->_size == 0)
 			return this->_nil;
@@ -167,9 +185,9 @@ namespace ft
 		const Node * cur = this->_root;
 		while (cur != NULL)
 		{
-			if (cur->_value.first <key)
+			if (this->_comp(cur->_value.first, key))
 				cur = cur->_child[RIGHT];
-			else if (key < cur->_value.first)
+			else if (this->_comp(key, cur->_value.first))
 				cur = cur->_child[LEFT];
 			else
 				return cur;
@@ -177,14 +195,15 @@ namespace ft
 		return this->_nil;
 	}
 
-	template < class K, class T >
-	typename ft::Tree<K, T>::Node * ft::Tree<K, T>::insert ( const value_type & value )
+	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::insert ( const_reference value )
 	{
 		Node * node;
 
 		if (this->_size == 0)
 		{
-			node = new Node(value);
+			node = this->_alloc.allocate(1);
+			*node = Node(value);
 			node->_parent = this->_nil;
 			this->_root = node;
 			this->_nil->_child[LEFT] = node;
@@ -197,9 +216,9 @@ namespace ft
 		dir_t dir;
 		while (1)
 		{
-			if (parent->_value.first < value.first)
+			if (this->_comp(parent->_value.first, value.first))
 				dir = RIGHT;
-			else if (value.first < parent->_value.first)
+			else if (this->_comp(value.first, parent->_value.first))
 				dir = LEFT;
 			else
 				return this->_nil;
@@ -207,19 +226,20 @@ namespace ft
 				break ;
 			parent = parent->_child[dir];
 		}
-		node = new Node (value);
+		node = this->_alloc.allocate(1);
+		*node = Node(value);
 		parent->_child[dir] = node;
 		node->_parent = parent;
-		if (value.first < this->_nil->_child[RIGHT]->_value.first)
+		if (this->_comp(value.first, this->_nil->_child[RIGHT]->_value.first))
 			this->_nil->_child[RIGHT] = node;
-		if (this->_nil->_child[LEFT]->_value.first < value.first)
+		if (this->_comp(this->_nil->_child[LEFT]->_value.first, value.first))
 			this->_nil->_child[LEFT] = node;
 		this->_size++;
 		return node;
 	}
 
-	template < class K, class T >
-	typename ft::Tree<K, T>::Node * ft::Tree<K, T>::erase ( Node * target )
+	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::erase ( Node * target )
 	{
 		if (this->_size == 1)
 		{
@@ -227,7 +247,8 @@ namespace ft
 			this->_nil->_child[RIGHT] = this->_nil;
 			this->_root = this->_nil;
 			this->_size--;
-			delete target;
+			target->~Node();
+			this->_alloc.deallocate(target, 1);
 		}
 		else if (target == this->_nil->_child[LEFT]) // is the last
 			this->_nil->_child[LEFT] = target->prev();
@@ -239,7 +260,7 @@ namespace ft
 			Node * following = target->_child[RIGHT];
 			while (following->_child[LEFT] != NULL)
 				following = following->_child[LEFT];
-			target->_value = following->_value; // TODO : memmove
+			memmove(&target->_value, &following->_value, sizeof(value_type));
 			Node * temp = target;
 			target = following;
 			following = temp;
@@ -248,7 +269,8 @@ namespace ft
 			else
 				target->_parent->_child[RIGHT] = target->_child[RIGHT];
 				this->_size--;
-			delete target;
+			target->~Node();
+			this->_alloc.deallocate(target, 1);
 			return following;
 		}
 		else // No bigger child
@@ -263,13 +285,14 @@ namespace ft
 				target->_parent->_child[LEFT] = target->_child[LEFT];
 			else
 				target->_parent->_child[RIGHT] = target->_child[LEFT];
-			delete target;
+			target->~Node();
+			this->_alloc.deallocate(target, 1);
 			return following;
 		}
 	}
 
-	template < class K, class T >
-	void ft::Tree<K, T>::clear ( void )
+	template < class K, class T, class C, class A >
+	void ft::Tree<K, T, C, A>::clear ( void )
 	{
 		if (this->_size == 0)
 			return ;
@@ -280,8 +303,8 @@ namespace ft
 		this->_nil->_child[RIGHT] = this->_nil;
 	}
 
-	template < class K, class T >
-	typename ft::Tree<K, T>::Node * ft::Tree<K, T>::lower_bound ( const key_type & key )
+	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::lower_bound ( const key_type & key )
 	{
 		if (this->_size == 0)
 			return this->_nil;
@@ -289,9 +312,9 @@ namespace ft
 		Node * temp = cur;
 		while (cur != NULL)
 		{
-			if (cur->_value.first < key)
+			if (this->_comp(cur->_value.first, key))
 				cur = cur->_child[RIGHT];
-			else if (key < cur->_value.first)
+			else if (this->_comp(key, cur->_value.first))
 			{
 				temp = cur;
 				cur = cur->_child[LEFT];
@@ -302,8 +325,8 @@ namespace ft
 		return temp;
 	}
 
-	template < class K, class T >
-	const typename ft::Tree<K, T>::Node * ft::Tree<K, T>::lower_bound ( const key_type & key ) const
+	template < class K, class T, class C, class A >
+	const typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::lower_bound ( const key_type & key ) const
 	{
 		if (this->_size == 0)
 			return this->_nil;
@@ -311,9 +334,9 @@ namespace ft
 		Node * temp = cur;
 		while (cur != NULL)
 		{
-			if (cur->_value.first < key)
+			if (this->_comp(cur->_value.first, key))
 				cur = cur->_child[RIGHT];
-			else if (key < cur->_value.first)
+			else if (this->_comp(key, cur->_value.first))
 			{
 				temp = cur;
 				cur = cur->_child[LEFT];
@@ -324,8 +347,8 @@ namespace ft
 		return temp;
 	}
 
-	template < class K, class T >
-	typename ft::Tree<K, T>::Node * ft::Tree<K, T>::upper_bound ( const key_type & key )
+	template < class K, class T, class C, class A >
+	typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::upper_bound ( const key_type & key )
 	{
 		if (this->_size == 0)
 			return this->_nil;
@@ -333,9 +356,9 @@ namespace ft
 		Node * temp = cur;
 		while (cur != NULL)
 		{
-			if (cur->_value.first < key)
+			if (this->_comp(cur->_value.first, key))
 				cur = cur->_child[RIGHT];
-			else if (key < cur->value.first)
+			else if (this->_comp(key, cur->value.first))
 			{
 				temp = cur;
 				cur = cur->_child[LEFT];
@@ -346,8 +369,8 @@ namespace ft
 		return temp;
 	}
 
-	template < class K, class T >
-	const typename ft::Tree<K, T>::Node * ft::Tree<K, T>::upper_bound ( const key_type & key ) const
+	template < class K, class T, class C, class A >
+	const typename ft::Tree<K, T, C, A>::Node * ft::Tree<K, T, C, A>::upper_bound ( const key_type & key ) const
 	{
 		if (this->_size == 0)
 			return this->_nil;
@@ -355,9 +378,9 @@ namespace ft
 		Node * temp = cur;
 		while (cur != NULL)
 		{
-			if (cur->_value.first < key)
+			if (this->_comp(cur->_value.first, key))
 				cur = cur->_child[RIGHT];
-			else if (key < cur->value.first)
+			else if (this->_comp(key, cur->value.first))
 			{
 				temp = cur;
 				cur = cur->_child[LEFT];
@@ -368,14 +391,15 @@ namespace ft
 		return temp;
 	}
 
-	template < class K, class T >
-	void ft::Tree<K, T>::destroy ( Node * target )
+	template < class K, class T, class C, class A >
+	void ft::Tree<K, T, C, A>::destroy ( Node * target )
 	{
 		if (target->_child[LEFT] != NULL)
 			this->destroy(target->_child[LEFT]);
 		if (target->_child[RIGHT] != NULL)
 			this->destroy(target->_child[RIGHT]);
-		delete target;
+		target->~Node();
+		this->_alloc.deallocate(target, 1);
 	}
 
 } // namespace ft
