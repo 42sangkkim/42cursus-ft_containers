@@ -3,6 +3,7 @@
 
 # include <memory>
 # include <functional>
+# include "./Tree.hpp"
 # include "./pair.hpp"
 
 namespace ft
@@ -32,6 +33,9 @@ namespace ft
 			typedef reverse_iterator<iterator>					reverse_iterator;
 			typedef reverse_iterator<const_iterator>			const_reverse_iterator;
 
+			typedef Tree<Key, T, Compare, Allocator>			tree_type;
+			typedef tree_type::Node								node_type;
+
 			// Member classes
 			class value_compare : public std::binary_function< value_type, value_type, bool >
 			{
@@ -47,7 +51,10 @@ namespace ft
 
 			}; // class value_compare
 
-			Tree<Key, T, Compare, Allocator>					_tree;
+			tree_type											_tree;
+			key_compare											_comp;
+			allocator_type										_alloc;
+			value_compare										_value_comp;
 
 			// Member functions
 			map ( void );
