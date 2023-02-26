@@ -43,16 +43,17 @@ namespace ft
 					// Member objects
 					Compare comp;
 
+					// protected member functions
+					value_compare ( Compare c );
+
 				public:
 					// Member functions
-					value_compare ( void );
-					value_compare ( Compare c );
 					bool operator () ( const value_type & lhs, const value_type) const;
 
 			}; // class value_compare
 
 			tree_type											_tree;
-			key_compare											_comp;
+			key_compare											_key_comp;
 			allocator_type										_alloc;
 			value_compare										_value_comp;
 
