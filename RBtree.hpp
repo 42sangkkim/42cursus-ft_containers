@@ -1,54 +1,34 @@
 #ifndef FT_CONTAINERS_RB_TREE_HPP
 # define FT_CONTAINERS_RB_TREE_HPP
 
+# include <functional>
+# include <memory>
 # include "./pair.hpp"
 
 namespace ft
 {
-	template < class Key, class T, class Compare, class Allocator >
+	template < class T, class Compare = std::less<T>, class Allocator = std::allocator<T> >
 	class RBtree
 	{
 		public:
-			typedef Key								key_type;
-			typedef T								mapped_type;
-			typedef ft::pair<const Key, T>			value_type;
-			typedef Compare							key_compare;
-			typedef Allocator						allocator_type;
+			typedef T										value_type;
+			typedef Compare									compare;
+			typedef Allocator								allocator_type;
 
 		protected:
-			enum dir_t { LEFT = 0, RIGHT, };
-			enum color_t { RED = 0, BLACK, };
+			enum dir_t   { LEFT = 0, RIGHT, };
+			enum color_t { RED  = 0, BLACK, };
 
 		public:
-			class RBnode
-			{
-				public:
-					value_type 			value;
-					RBnode *			parent;
-					RBnode *			child[2];
-					color_t				color;
-
-				public:
-					RBnode ( void );
-					RBnode ( const RBnode & other );
-					RBnode ( const value_type & value );
-					~RBnode ( void );
-
-					RBnode & operator = ( const RBnode & other );
-
-					RBnode * prev ( void );
-					const RBnode * prev ( void ) const;
-					RBnode * next ( void );
-					const RBnode * next ( void ) const;
-			}; // class Node
+			class node;
 
 		protected:
-			RBnode *											_nil;
-			RBnode *											_root;
-			size_t												_size;
-			key_compare											_comp;
-			allocator_type										_alloc;
-			typename Allocator::template rebind<RBnode>::other	_node_alloc;
+			node *													_nil;
+			node *													_root;
+			size_t													_size;
+			compare													_comp;
+			allocator_type											_alloc;
+			typename Allocator::template rebind<node>:: other		_node_alloc;
 
 		private:
 			// Never using
@@ -56,35 +36,41 @@ namespace ft
 			RBtree & operator = ( const RBtree & other );
 
 		protected:
-			void destroy_node ( RBnode * node );
+			void destroy_node ( node * node );
 
 		public:
-			RBtree ( void );
-			RBtree ( const key_compare & comp, const allocator_type & alloc );
+			// RBtree ( void );
+			RBtree ( const compare & comp, const allocator_type & alloc );
 			~RBtree ( void );
 
 			size_t size ( void ) const;
+			size_t max_size ( void ) const;
 
-			RBnode * begin ( void );
-			const RBnode * begin ( void ) const;
-			RBnode * end ( void );
-			const RBnode * end ( void ) const;
+			node * begin ( void );
+			const node * begin ( void ) const;
 
-			RBnode * find ( const key_type & key );
-			const RBnode * find ( const key_type & key ) const;
-			RBnode * lower_bound ( const key_type & key );
-			const RBnode * lower_bound ( const key_type & key ) const;
-			RBnode * upper_bound ( const key_type & key );
-			const RBnode * upper_bound ( const key_type & key ) const;
+			node * end ( void );
+			const node * end ( void ) const;
 
-			ft::pair<RBnode *, bool> insert ( const value_type & value );
-			RBnode * erase ( RBnode * target );
+			node * find ( const value_type & value );
+			const node * find ( const value_type & value ) const;
+
+			node * lower_bound ( const value_type & value );
+			const node * lower_bound ( const value_type & value ) const;
+
+			node * upper_bound ( const value_type & value );
+			const node * upper_bound ( const value_type & value ) const;
+
+			ft::pair<node *, bool> insert ( const value_type & value );
+			node * erase ( node * target );
 			void clear ( void );
 
 			void swap ( RBtree & other );
 
 	}; // class RBree
 } // namespace ft
+
+# include "./RBtree_node.hpp"
 
 # include "./RBtree.tpp"
 

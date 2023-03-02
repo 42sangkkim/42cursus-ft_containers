@@ -20,123 +20,31 @@ namespace ft
 	{
 		public:
 			// Member types
-			typedef Key											key_type;
-			typedef T											mapped_type;
-			typedef ft::pair< const Key, T >					value_type;
-			typedef std::size_t									size_type;
-			typedef std::ptrdiff_t								difference_type;
-			typedef Compare										key_compare;
-			typedef Allocator									allocator_type;
-			typedef value_type &								reference;
-			typedef const value_type &							const_reference;
-			typedef typename Allocator::pointer					pointer;
-			typedef typename Allocator::const_pointer			const_pointer;
-			class												iterator;
-			class												const_iterator;	
-			typedef ft::reverse_iterator<iterator>				reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+			typedef Key												key_type;
+			typedef T												mapped_type;
+			typedef ft::pair< const Key, T >						value_type;
+			typedef std::size_t										size_type;
+			typedef std::ptrdiff_t									difference_type;
+			typedef Compare											key_compare;
+			class 													value_compare;	
+			typedef Allocator										allocator_type;
+			typedef value_type &									reference;
+			typedef const value_type &								const_reference;
+			typedef typename Allocator::pointer						pointer;
+			typedef typename Allocator::const_pointer				const_pointer;
+			class													iterator;
+			class													const_iterator;	
+			typedef ft::reverse_iterator<iterator>					reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
-			typedef RBtree<Key, T, Compare, Allocator>			tree_type;
-			typedef typename tree_type::RBnode					node_type;
+		protected:
+			typedef RBtree<value_type, value_compare, Allocator>	tree_type;
+			typedef typename tree_type::node						node_type;
 
-			// Member classes
-			class value_compare : public std::binary_function< value_type, value_type, bool >
-			{
-				friend class ft::map<Key, T, Compare, Allocator>;
-				protected:
-					// Member objects
-					Compare comp;
-
-					// protected member functions
-					value_compare ( Compare c );
-
-				public:
-					// Member functions
-					bool operator () ( const value_type & lhs, const value_type & rhs ) const;
-
-			}; // class value_compare
-
-			class iterator
-			{
-				friend class ft::map<Key, T, Compare, Allocator>;
-				friend class ft::map<Key, T, Compare, Allocator>::const_iterator;
-
-				public:
-					// public member types
-					typedef ft::pair<const Key, T>				value_type;
-					typedef std::ptrdiff_t						difference_type;
-					typedef value_type *						pointer;
-					typedef value_type &						reference;
-					typedef std::bidirectional_iterator_tag		iterator_category;
-
-				protected:
-					node_type									*_cur;
-
-				public:
-					// public member functions
-					iterator ( void );
-					iterator ( const iterator & other );
-					iterator ( node_type * cur );
-					~iterator ( void );
-
-					iterator & operator = ( const iterator & other );
-
-					bool operator == ( const iterator & other ) const;
-					bool operator != ( const iterator & other ) const;
-
-					value_type & operator * ( void );
-					const value_type & operator * ( void ) const;
-					value_type * operator -> ( void );
-					const value_type * operator -> ( void ) const;
-
-					iterator & operator ++ ( void );
-					iterator operator ++ ( int n );
-					iterator & operator -- ( void );
-					iterator operator -- ( int n );
-			};
-
-			class const_iterator
-			{
-				friend class ft::map<Key, T, Compare, Allocator>;
-				friend class ft::map<Key, T, Compare, Allocator>::iterator;
-
-				public:
-					// public member types
-					typedef ft::pair<const Key, T>				value_type;
-					typedef std::ptrdiff_t						difference_type;
-					typedef const value_type *					pointer;
-					typedef const value_type &					reference;
-					typedef std::bidirectional_iterator_tag		iterator_category;
-
-				protected:
-					const node_type								*_cur;
-
-				public:
-					const_iterator ( void );
-					const_iterator ( const const_iterator & other );
-					const_iterator ( const iterator & it );
-					const_iterator ( const node_type * cur );
-					~const_iterator ( void );
-
-					const_iterator & operator = ( const const_iterator & other );
-
-					bool operator == ( const const_iterator & other ) const;
-					bool operator != ( const const_iterator & other ) const;
-
-					const value_type & operator * ( void ) const;
-					const value_type * operator -> ( void ) const;
-
-					const_iterator & operator ++ ( void );
-					const_iterator operator ++ ( int n );
-					const_iterator & operator -- ( void );
-					const_iterator operator -- ( int n );
-			};
-
-			key_compare											_key_comp;
-			allocator_type										_alloc;
-			value_compare										_value_comp;
+		protected:
 			tree_type											_tree;
 
+		public:
 			// Member functions
 			map ( void );
 			explicit map ( const key_compare & comp, const allocator_type & alloc = allocator_type() );
@@ -196,8 +104,29 @@ namespace ft
 			value_compare value_comp ( void ) const;
 
 	}; // class map
+
+	// Non-member functions
+	template < class Key, class T, class Compare, class Allocator >
+	bool operator == ( const ft::map<Key, T, Compare, Allocator> & lhs, const ft::map<Key, T, Compare, Allocator> & rhs );
+	template < class Key, class T, class Compare, class Allocator >
+	bool operator != ( const ft::map<Key, T, Compare, Allocator> & lhs, const ft::map<Key, T, Compare, Allocator> & rhs );
+	template < class Key, class T, class Compare, class Allocator >
+	bool operator < ( const ft::map<Key, T, Compare, Allocator> & lhs, const ft::map<Key, T, Compare, Allocator> & rhs );
+	template < class Key, class T, class Compare, class Allocator >
+	bool operator > ( const ft::map<Key, T, Compare, Allocator> & lhs, const ft::map<Key, T, Compare, Allocator> & rhs );
+	template < class Key, class T, class Compare, class Allocator >
+	bool operator <= ( const ft::map<Key, T, Compare, Allocator> & lhs, const ft::map<Key, T, Compare, Allocator> & rhs );
+	template < class Key, class T, class Compare, class Allocator >
+	bool operator >= ( const ft::map<Key, T, Compare, Allocator> & lhs, const ft::map<Key, T, Compare, Allocator> & rhs );
+
+	template < class Key, class T, class Compare, class Allocator >
+	void swap ( ft::map<Key, T, Compare, Allocator> & lhs, ft::map<Key, T, Compare, Allocator> & rhs );
+
 } // namespace ft
 
+# include "./map_value_compare.hpp"
+# include "./map_iterator.hpp"
+# include "./map_const_iterator.hpp"
 # include "./map.tpp"
 
 #endif // FT_CONTAINERS_MAP_HPP

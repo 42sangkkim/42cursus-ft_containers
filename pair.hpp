@@ -26,7 +26,7 @@ namespace ft
 
 	// Non-member functions
 	template < class T1, class T2 >
-	typename ft::pair<T1, T2> ft::make_pair ( T1 t, T2 u );
+	typename ft::pair<T1, T2> make_pair ( T1 t, T2 u );
 
 	template < class T1, class T2 >
 	bool operator == ( const ft::pair<T1, T2> & lhs, const ft::pair<T1, T2> & rhs );
