@@ -3,19 +3,6 @@
 
 # include "./RBtree.hpp"
 
-// RBtreed
-
-// template < class T, class Compare, class Allocator >
-// ft::RBtree<T, Compare, Allocator>::RBtree ( void )
-// 	: _size(0), _comp(), _alloc(), _node_alloc()
-// {
-// 	this->_nil = this->_node_alloc.allocate(1);
-// 	this->_alloc.construct(this->_nil, node());
-// 	this->_nil->child[RIGHT] = this->_nil;
-// 	this->_nil->child[LEFT] = this->_nil;
-// 	this->_root = this->_nil;
-// }
-
 template < class T, class Compare, class Allocator >
 ft::RBtree<T, Compare, Allocator>::RBtree ( const compare & comp, const allocator_type & alloc )
 	: _size(0), _comp(comp), _alloc(alloc), _node_alloc()
@@ -202,7 +189,7 @@ ft::pair<typename ft::RBtree<T, Compare, Allocator>::node *, bool> ft::RBtree<T,
 {
 	node *	cur = this->_root;
 
-	if (cur == this->_nil)
+	if (cur == this->_nil) // size == 0
 	{
 		this->_root = this->_node_alloc.allocate(1);
 		this->_node_alloc.construct(this->_root, node(value));
@@ -210,6 +197,7 @@ ft::pair<typename ft::RBtree<T, Compare, Allocator>::node *, bool> ft::RBtree<T,
 		this->_nil->child[LEFT] = this->_root;
 		this->_nil->child[RIGHT] = this->_root;
 		this->_root->parent = this->_nil;
+		this->_root->color = BLACK;
 		return ft::make_pair(this->_root, true);
 	}
 
@@ -234,13 +222,13 @@ ft::pair<typename ft::RBtree<T, Compare, Allocator>::node *, bool> ft::RBtree<T,
 			this->_size += 1;
 			break ;
 		}
-		// TODO: Red Black Operation
 	}
 
 	if (this->_comp(cur->value, this->_nil->child[RIGHT]->value)) // update first
 		this->_nil->child[RIGHT] = cur;
 	if (this->_comp(this->_nil->child[LEFT]->value, cur->value)) // update last
 		this->_nil->child[LEFT] = cur;
+	check_double_red(cur);
 	return ft::make_pair(cur, true);
 }
 
@@ -328,6 +316,71 @@ void ft::RBtree<T, Compare, Allocator>::swap ( RBtree & other )
 	other._nil				= tmp_nil;
 	other._root				= tmp_root;
 	other._size				= tmp_size;
+}
+
+template < class T, class Compare, class Allocator >
+void ft::RBtree<T, Compare, Allocator>::check_double_red ( node * target )
+{
+	if (target->parent->color == BLACK)
+		return ;
+
+	node * parent;
+	node * grand;
+	node * uncle;
+
+	while (true)
+	{
+		parent = target->parent;
+		grand = parent->parent;
+		uncle = (parent == grand->child[RIGHT] ? grand->child[LEFT] : grand->child[RIGHT]);
+
+		if (uncle == NULL || uncle->color == BLACK)
+		{
+			dir_t dir = (parent == grand->child[LEFT] ? LEFT : RIGHT); 
+			if (target != parent->child[dir])
+				rotate(parent, dir);
+			grand->child[dir]->color = BLACK;
+			rotate(grand, (dir == LEFT ? RIGHT : LEFT));
+			grand->color = RED;
+			return ;
+		}
+		else // uncle->color == RED
+		{
+			parent->color = BLACK;
+			uncle->color = BLACK;
+			if (grand == this->_root)
+				return ;
+			grand->color = RED;
+			if (grand->parent->color == BLACK)
+				return;
+			target = grand;
+		}
+	}
+}
+
+template < class T, class Compare, class Allocator >
+void ft::RBtree<T, Compare, Allocator>::rotate ( node * target, dir_t dir)
+{
+	node * child = target->child[(dir == LEFT ? RIGHT : LEFT)];
+	node * parent = target->parent;
+
+	// link [target - child.child]
+	target->child[(dir == LEFT ? RIGHT : LEFT)] = child->child[dir];
+	if (child->child[dir] != NULL)
+		child->child[dir]->parent = target;
+
+	// link [child - target]
+	child->child[dir] = target;
+	target->parent = child;
+
+	// link [parent - child]
+	child->parent = parent;
+	if (target == this->_root)
+		this->_root = child;
+	else if (target == parent->child[LEFT])
+		parent->child[LEFT] = child;
+	else // (target == parent->child[RIGHT])
+		parent->child[RIGHT] = child;
 }
 
 #endif // FT_CONTAINERS_RB_TREE_TPP

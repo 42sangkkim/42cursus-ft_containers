@@ -32,14 +32,17 @@ namespace ft
 
 		private:
 			// Never using
+			RBtree ( void );
 			explicit RBtree ( const RBtree & other );
 			RBtree & operator = ( const RBtree & other );
 
 		protected:
 			void destroy_node ( node * node );
 
+			void check_double_red ( node * target );
+			void rotate ( node * target, dir_t dir );
+
 		public:
-			// RBtree ( void );
 			RBtree ( const compare & comp, const allocator_type & alloc );
 			~RBtree ( void );
 

@@ -11,9 +11,9 @@ namespace ft
 		public:
 			// Member objects
 			value_type									value;
+			color_t										color;
 			node *										parent;
 			node *										child[2];
-			color_t										color;
 
 		public:
 			// Member functions

@@ -7,7 +7,7 @@
 
 template < class T, class Compare, class Allocator >
 ft::RBtree<T, Compare, Allocator>::node::node ( void )
-	: value(), parent(NULL), color(RED)
+	: value(), color(RED), parent(NULL)
 {
 	child[RIGHT] = NULL;
 	child[LEFT] = NULL;
@@ -15,7 +15,7 @@ ft::RBtree<T, Compare, Allocator>::node::node ( void )
 
 template < class T, class Compare, class Allocator >
 ft::RBtree<T, Compare, Allocator>::node::node ( const node & other )
-	: value(other.value), parent(other.parent), color(other.color)
+	: value(other.value), color(other.color), parent(other.parent)
 {
 	child[RIGHT] = other.child[RIGHT];
 	child[LEFT] = other.child[LEFT];
@@ -23,7 +23,7 @@ ft::RBtree<T, Compare, Allocator>::node::node ( const node & other )
 
 template < class T, class Compare, class Allocator >
 ft::RBtree<T, Compare, Allocator>::node::node ( const value_type & value )
-	: value(value), parent(NULL), color(RED)
+	: value(value), color(RED), parent(NULL)
 {
 	child[RIGHT] = NULL;
 	child[LEFT] = NULL;
