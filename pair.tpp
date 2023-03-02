@@ -9,24 +9,18 @@ namespace ft
 	template < class T1, class T2 >
 	pair<T1, T2>::pair ( void )
 		: first(), second()
-	{
-
-	}
+	{}
 
 	template < class T1, class T2 >
 	pair<T1, T2>::pair ( const T1 & x, const T2 & y )
 		: first(x), second(y)
-	{
-
-	}
+	{}
 
 	template < class T1, class T2 >
 	template < class U1, class U2 >
 	pair<T1, T2>::pair ( const pair<U1, U2> & p )
 		: first(p.first), second(p.second)
-	{
-
-	}
+	{}
 
 	template < class T1, class T2 >
 	typename ft::pair<T1, T2> & pair<T1, T2>::operator = ( const pair & other )

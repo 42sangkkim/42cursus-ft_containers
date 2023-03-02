@@ -3,8 +3,11 @@
 
 # include <memory>
 # include <functional>
-# include "./Tree.hpp"
+# include "./RBtree.hpp"
 # include "./pair.hpp"
+# include "./reverse_iterator.hpp"
+
+#include<map>
 
 namespace ft
 {
@@ -26,19 +29,20 @@ namespace ft
 			typedef Allocator									allocator_type;
 			typedef value_type &								reference;
 			typedef const value_type &							const_reference;
-			typedef Allocator::pointer							pointer;
-			typedef Allocator::const_pointer					const_pointer;
-			typedef RBnode										iterator;
-			typedef const RBnode								const_iterator;
-			typedef reverse_iterator<iterator>					reverse_iterator;
-			typedef reverse_iterator<const_iterator>			const_reverse_iterator;
+			typedef typename Allocator::pointer					pointer;
+			typedef typename Allocator::const_pointer			const_pointer;
+			class												iterator;
+			class												const_iterator;	
+			typedef ft::reverse_iterator<iterator>				reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
-			typedef Tree<Key, T, Compare, Allocator>			tree_type;
-			typedef tree_type::Node								node_type;
+			typedef RBtree<Key, T, Compare, Allocator>			tree_type;
+			typedef typename tree_type::RBnode					node_type;
 
 			// Member classes
 			class value_compare : public std::binary_function< value_type, value_type, bool >
 			{
+				friend class ft::map<Key, T, Compare, Allocator>;
 				protected:
 					// Member objects
 					Compare comp;
@@ -48,14 +52,90 @@ namespace ft
 
 				public:
 					// Member functions
-					bool operator () ( const value_type & lhs, const value_type) const;
+					bool operator () ( const value_type & lhs, const value_type & rhs ) const;
 
 			}; // class value_compare
 
-			tree_type											_tree;
+			class iterator
+			{
+				friend class ft::map<Key, T, Compare, Allocator>;
+				friend class ft::map<Key, T, Compare, Allocator>::const_iterator;
+
+				public:
+					// public member types
+					typedef ft::pair<const Key, T>				value_type;
+					typedef std::ptrdiff_t						difference_type;
+					typedef value_type *						pointer;
+					typedef value_type &						reference;
+					typedef std::bidirectional_iterator_tag		iterator_category;
+
+				protected:
+					node_type									*_cur;
+
+				public:
+					// public member functions
+					iterator ( void );
+					iterator ( const iterator & other );
+					iterator ( node_type * cur );
+					~iterator ( void );
+
+					iterator & operator = ( const iterator & other );
+
+					bool operator == ( const iterator & other ) const;
+					bool operator != ( const iterator & other ) const;
+
+					value_type & operator * ( void );
+					const value_type & operator * ( void ) const;
+					value_type * operator -> ( void );
+					const value_type * operator -> ( void ) const;
+
+					iterator & operator ++ ( void );
+					iterator operator ++ ( int n );
+					iterator & operator -- ( void );
+					iterator operator -- ( int n );
+			};
+
+			class const_iterator
+			{
+				friend class ft::map<Key, T, Compare, Allocator>;
+				friend class ft::map<Key, T, Compare, Allocator>::iterator;
+
+				public:
+					// public member types
+					typedef ft::pair<const Key, T>				value_type;
+					typedef std::ptrdiff_t						difference_type;
+					typedef const value_type *					pointer;
+					typedef const value_type &					reference;
+					typedef std::bidirectional_iterator_tag		iterator_category;
+
+				protected:
+					const node_type								*_cur;
+
+				public:
+					const_iterator ( void );
+					const_iterator ( const const_iterator & other );
+					const_iterator ( const iterator & it );
+					const_iterator ( const node_type * cur );
+					~const_iterator ( void );
+
+					const_iterator & operator = ( const const_iterator & other );
+
+					bool operator == ( const const_iterator & other ) const;
+					bool operator != ( const const_iterator & other ) const;
+
+					const value_type & operator * ( void ) const;
+					const value_type * operator -> ( void ) const;
+
+					const_iterator & operator ++ ( void );
+					const_iterator operator ++ ( int n );
+					const_iterator & operator -- ( void );
+					const_iterator operator -- ( int n );
+			};
+
 			key_compare											_key_comp;
 			allocator_type										_alloc;
 			value_compare										_value_comp;
+			tree_type											_tree;
 
 			// Member functions
 			map ( void );
