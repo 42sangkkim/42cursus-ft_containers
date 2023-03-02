@@ -96,6 +96,29 @@ namespace ft
 
 	}; // class vector
 
+	// Non-member functions
+
+	template < class T, class A >
+	bool operator == ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
+	
+	template < class T, class A >
+	bool operator != ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
+	
+	template < class T, class A >
+	bool operator < ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
+	
+	template < class T, class A >
+	bool operator > ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
+	
+	template < class T, class A >
+	bool operator <= ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
+	
+	template < class T, class A >
+	bool operator >= ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
+	
+	template < class T, class A >
+	void swap ( ft::vector<T, A> & lhs, ft::vector<T, A> & rhs );
+	
 } // namespace ft
 
 # include "./vector.tpp"
