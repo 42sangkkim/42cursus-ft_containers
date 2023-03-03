@@ -238,43 +238,47 @@ typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Alloca
 	node * following = target->next();
 
 	if (target == this->_nil)
-		return target;
-
+		return this->_nil;
 
 	following = target->next();
-	if (this->_size == 1)
-	{
-		this->_root = this->_nil;
-		this->_nil->child[RIGHT] = this->_nil;
-		this->_nil->child[LEFT] = this->_nil;
-		this->_size -= 1;
-		this->_node_alloc.destroy(target);
-		this->_node_alloc.deallocate(target, 1);
-		return this->_nil;
-	}
+	if (target == this->_nil->child[RIGHT]) // update first
+		this->_nil->child[RIGHT] = following;
+	if (target == this->_nil->child[LEFT]) // update last
+		this->_nil->child[LEFT] = target->prev();
+
 	if (target->child[RIGHT] != NULL)
 	{
 		memmove(&target->value, &following->value, sizeof(value_type));
 		node * temp = target;
 		target = following;
 		following = temp;
+		if (target == this->_nil->child[RIGHT]) // update first
+			this->_nil->child[RIGHT] = following;
 	}
-	else if (target == this->_nil->child[RIGHT]) // update first
-		this->_nil->child[RIGHT] = target->next();
-	if (target == this->_nil->child[LEFT]) // update last
-		this->_nil->child[LEFT] = target->prev();
 
-	// TODO: Red Black Operation
-
-	node * child = (target->child[RIGHT] != NULL ? target->child[RIGHT] : target->child[LEFT]);
-	if (child != NULL)
-		child->parent = target->parent;
-	if (target == this->_root)
+	node * parent = target->parent;
+	node * child = (target->child[LEFT] == NULL ? target->child[RIGHT] : target->child[LEFT]);
+	if (this->_size == 1)
+		this->_root = this->_nil;
+	else if (target == this->_root)
+	{
 		this->_root = child;
-	else if (target == target->parent->child[RIGHT])
-		target->parent->child[RIGHT] = child;
-	else // (target == this->parent->child[LEFT])
-		target->parent->child[LEFT] = child;
+		child->parent = parent;
+		child->color = BLACK;
+	}
+	else
+	{
+		// link parent - child
+		if (target == parent->child[LEFT])
+			parent->child[LEFT] = child;
+		else // (target == parent->child[RIGHT])
+			parent->child[RIGHT] = child;
+		if (child != NULL)
+			child->parent = parent;
+
+		if (target->color == BLACK)
+			extra_black(child, parent);
+	}
 	this->_node_alloc.destroy(target);
 	this->_node_alloc.deallocate(target, 1);
 	this->_size -= 1;
@@ -319,20 +323,40 @@ void ft::RBtree<T, Compare, Allocator>::swap ( RBtree & other )
 }
 
 template < class T, class Compare, class Allocator >
+void ft::RBtree<T, Compare, Allocator>::rotate ( node * target, dir_t dir)
+{
+	node * child = target->child[(dir == LEFT ? RIGHT : LEFT)];
+	node * parent = target->parent;
+
+	// link [target - child.child]
+	target->child[(dir == LEFT ? RIGHT : LEFT)] = child->child[dir];
+	if (child->child[dir] != NULL)
+		child->child[dir]->parent = target;
+
+	// link [child - target]
+	child->child[dir] = target;
+	target->parent = child;
+
+	// link [parent - child]
+	child->parent = parent;
+	if (target == this->_root)
+		this->_root = child;
+	else if (target == parent->child[LEFT])
+		parent->child[LEFT] = child;
+	else // (target == parent->child[RIGHT])
+		parent->child[RIGHT] = child;
+}
+
+template < class T, class Compare, class Allocator >
 void ft::RBtree<T, Compare, Allocator>::check_double_red ( node * target )
 {
-	if (target->parent->color == BLACK)
-		return ;
-
-	node * parent;
-	node * grand;
-	node * uncle;
-
 	while (true)
 	{
-		parent = target->parent;
-		grand = parent->parent;
-		uncle = (parent == grand->child[RIGHT] ? grand->child[LEFT] : grand->child[RIGHT]);
+		if (target->parent->color == BLACK)
+			return ;
+		node * parent = target->parent;
+		node * grand = parent->parent;
+		node * uncle = (parent == grand->child[RIGHT] ? grand->child[LEFT] : grand->child[RIGHT]);
 
 		if (uncle == NULL || uncle->color == BLACK)
 		{
@@ -359,28 +383,65 @@ void ft::RBtree<T, Compare, Allocator>::check_double_red ( node * target )
 }
 
 template < class T, class Compare, class Allocator >
-void ft::RBtree<T, Compare, Allocator>::rotate ( node * target, dir_t dir)
+void ft::RBtree<T, Compare, Allocator>::extra_black ( node * target, node * parent )
 {
-	node * child = target->child[(dir == LEFT ? RIGHT : LEFT)];
-	node * parent = target->parent;
+	while (true)
+	{
+		if (target == this->_root)
+			return ;
 
-	// link [target - child.child]
-	target->child[(dir == LEFT ? RIGHT : LEFT)] = child->child[dir];
-	if (child->child[dir] != NULL)
-		child->child[dir]->parent = target;
+		// red and black
+		if (target != NULL && target->color == RED)
+		{
+			target->color = BLACK;
+			return ;
+		}
 
-	// link [child - target]
-	child->child[dir] = target;
-	target->parent = child;
+		// doubly black
+		dir_t dir = (parent->child[LEFT] == target ? LEFT : RIGHT);
+		dir_t revDir = (dir == LEFT ? RIGHT : LEFT);
+		node * sibling = parent->child[revDir];
+		node * close   = sibling->child[dir];
+		node * distant = sibling->child[revDir];
 
-	// link [parent - child]
-	child->parent = parent;
-	if (target == this->_root)
-		this->_root = child;
-	else if (target == parent->child[LEFT])
-		parent->child[LEFT] = child;
-	else // (target == parent->child[RIGHT])
-		parent->child[RIGHT] = child;
+		int doubly_black_case;
+		if (distant != NULL && distant->color == RED)
+			doubly_black_case = 4;
+		else if (close != NULL && close->color == RED)
+			doubly_black_case = 3;
+		else if (sibling->color == BLACK)
+			doubly_black_case = 2;
+		else // (sibling->color == RED)
+			doubly_black_case = 1;
+
+		switch (doubly_black_case)
+		{
+			case 1:
+				rotate(parent, dir);
+				parent->color = RED;
+				sibling->color = BLACK;
+				break ;
+			case 2:
+				sibling->color = RED;
+				target = parent;
+				parent = target->parent;
+				break ;
+			case 3:
+				rotate(sibling, revDir);
+				close->color = BLACK;
+				sibling->color = RED;
+				distant = sibling;
+				sibling = close;
+				close = sibling->child[dir];
+				// continue to case 4
+			case 4:
+				rotate(parent, dir);
+				sibling->color = parent->color;
+				parent->color = BLACK;
+				distant->color = BLACK;
+				return ;
+		}
+	}
 }
 
 #endif // FT_CONTAINERS_RB_TREE_TPP

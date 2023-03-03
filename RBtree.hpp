@@ -39,8 +39,9 @@ namespace ft
 		protected:
 			void destroy_node ( node * node );
 
-			void check_double_red ( node * target );
 			void rotate ( node * target, dir_t dir );
+			void check_double_red ( node * target );
+			void extra_black ( node * target, node * parent);
 
 		public:
 			RBtree ( const compare & comp, const allocator_type & alloc );
