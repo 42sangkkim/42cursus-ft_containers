@@ -7,19 +7,19 @@ template < class T, class Compare, class Allocator >
 ft::RBtree<T, Compare, Allocator>::RBtree ( const compare & comp, const allocator_type & alloc )
 	: _size(0), _comp(comp), _alloc(alloc), _node_alloc()
 {
-	this->_nil = this->_node_alloc.allocate(1);
-	this->_node_alloc.construct(this->_nil, node());
-	this->_nil->child[RIGHT] = this->_nil;
-	this->_nil->child[LEFT] = this->_nil;
-	this->_root = this->_nil;
+	this->_head = this->_node_alloc.allocate(1);
+	this->_node_alloc.construct(this->_head, node());
+	this->_head->child[RIGHT] = this->_head;
+	this->_head->child[LEFT] = this->_head;
+	this->_root = this->_head;
 }
 
 template < class T, class Compare, class Allocator >
 ft::RBtree<T, Compare, Allocator>::~RBtree ( void )
 {
 	this->clear();
-	this->_node_alloc.destroy(this->_nil);
-	this->_node_alloc.deallocate(this->_nil, 1);
+	this->_node_alloc.destroy(this->_head);
+	this->_node_alloc.deallocate(this->_head, 1);
 }
 
 template < class T, class Compare, class Allocator >
@@ -37,25 +37,25 @@ size_t ft::RBtree<T, Compare, Allocator>::max_size ( void ) const
 template < class T, class Compare, class Allocator >
 typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::begin ( void )
 {
-	return this->_nil->child[RIGHT];
+	return this->_head->child[RIGHT];
 }
 
 template < class T, class Compare, class Allocator >
 const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::begin ( void ) const
 {
-	return this->_nil->child[RIGHT];
+	return this->_head->child[RIGHT];
 }
 
 template < class T, class Compare, class Allocator >
 typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::end ( void )
 {
-	return this->_nil;
+	return this->_head;
 }
 
 template < class T, class Compare, class Allocator >
 const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::end ( void ) const
 {
-	return this->_nil;
+	return this->_head;
 }
 
 template < class T, class Compare, class Allocator >
@@ -63,8 +63,8 @@ typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Alloca
 {
 	node * cur = this->_root;
 
-	if (cur == this->_nil)
-		return this->_nil;
+	if (cur == this->_head)
+		return this->_head;
 	while (cur != NULL)
 	{
 		if (this->_comp(value, cur->value))
@@ -74,7 +74,7 @@ typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Alloca
 		else
 			return cur;
 	}
-	return this->_nil;
+	return this->_head;
 }
 
 template < class T, class Compare, class Allocator >
@@ -82,8 +82,8 @@ const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, 
 {
 	const node * cur = this->_root;
 
-	if (cur == this->_nil)
-		return this->_nil;
+	if (cur == this->_head)
+		return this->_head;
 	while (cur != NULL)
 	{
 		if (this->_comp(value, cur->value))
@@ -93,17 +93,17 @@ const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, 
 		else
 			return cur;
 	}
-	return this->_nil;
+	return this->_head;
 }
 
 template < class T, class Compare, class Allocator >
 typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::lower_bound ( const value_type & value )
 {
 	node * cur = this->_root;
-	node * tmp = this->_nil;
+	node * tmp = this->_head;
 
-	if (cur == this->_nil)
-		return this->_nil;
+	if (cur == this->_head)
+		return this->_head;
 	while (cur != NULL)
 	{
 		if (this->_comp(value, cur->value)) // value < cur
@@ -123,10 +123,10 @@ template < class T, class Compare, class Allocator >
 const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::lower_bound ( const value_type & value ) const
 {
 	const node * cur = this->_root;
-	const node * tmp = this->_nil;
+	const node * tmp = this->_head;
 
-	if (cur == this->_nil)
-		return this->_nil;
+	if (cur == this->_head)
+		return this->_head;
 	while (cur != NULL)
 	{
 		if (this->_comp(value, cur->value))
@@ -146,10 +146,10 @@ template < class T, class Compare, class Allocator >
 typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::upper_bound ( const value_type & value )
 {
 	node * cur = this->_root;
-	node * tmp = this->_nil;
+	node * tmp = this->_head;
 
-	if (cur == this->_nil)
-		return this->_nil;
+	if (cur == this->_head)
+		return this->_head;
 	while (cur != NULL)
 	{
 		if (this->_comp(value, cur->value))
@@ -167,10 +167,10 @@ template < class T, class Compare, class Allocator >
 const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::upper_bound ( const value_type & value ) const
 {
 	const node * cur = this->_root;
-	const node * tmp = this->_nil;
+	const node * tmp = this->_head;
 
-	if (cur == this->_nil)
-		return this->_nil;
+	if (cur == this->_head)
+		return this->_head;
 	while (cur != NULL)
 	{
 		if (this->_comp(value, cur->value))
@@ -189,14 +189,14 @@ ft::pair<typename ft::RBtree<T, Compare, Allocator>::node *, bool> ft::RBtree<T,
 {
 	node *	cur = this->_root;
 
-	if (cur == this->_nil) // size == 0
+	if (cur == this->_head) // size == 0
 	{
 		this->_root = this->_node_alloc.allocate(1);
 		this->_node_alloc.construct(this->_root, node(value));
 		this->_size += 1;
-		this->_nil->child[LEFT] = this->_root;
-		this->_nil->child[RIGHT] = this->_root;
-		this->_root->parent = this->_nil;
+		this->_head->child[LEFT] = this->_root;
+		this->_head->child[RIGHT] = this->_root;
+		this->_root->parent = this->_head;
 		this->_root->color = BLACK;
 		return ft::make_pair(this->_root, true);
 	}
@@ -224,10 +224,10 @@ ft::pair<typename ft::RBtree<T, Compare, Allocator>::node *, bool> ft::RBtree<T,
 		}
 	}
 
-	if (this->_comp(cur->value, this->_nil->child[RIGHT]->value)) // update first
-		this->_nil->child[RIGHT] = cur;
-	if (this->_comp(this->_nil->child[LEFT]->value, cur->value)) // update last
-		this->_nil->child[LEFT] = cur;
+	if (this->_comp(cur->value, this->_head->child[RIGHT]->value)) // update first
+		this->_head->child[RIGHT] = cur;
+	if (this->_comp(this->_head->child[LEFT]->value, cur->value)) // update last
+		this->_head->child[LEFT] = cur;
 	check_double_red(cur);
 	return ft::make_pair(cur, true);
 }
@@ -237,14 +237,14 @@ typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Alloca
 {
 	node * following = target->next();
 
-	if (target == this->_nil)
-		return this->_nil;
+	if (target == this->_head)
+		return this->_head;
 
 	following = target->next();
-	if (target == this->_nil->child[RIGHT]) // update first
-		this->_nil->child[RIGHT] = following;
-	if (target == this->_nil->child[LEFT]) // update last
-		this->_nil->child[LEFT] = target->prev();
+	if (target == this->_head->child[RIGHT]) // update first
+		this->_head->child[RIGHT] = following;
+	if (target == this->_head->child[LEFT]) // update last
+		this->_head->child[LEFT] = target->prev();
 
 	if (target->child[RIGHT] != NULL)
 	{
@@ -252,14 +252,14 @@ typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Alloca
 		node * temp = target;
 		target = following;
 		following = temp;
-		if (target == this->_nil->child[RIGHT]) // update first
-			this->_nil->child[RIGHT] = following;
+		if (target == this->_head->child[RIGHT]) // update first
+			this->_head->child[RIGHT] = following;
 	}
 
 	node * parent = target->parent;
 	node * child = (target->child[LEFT] == NULL ? target->child[RIGHT] : target->child[LEFT]);
 	if (this->_size == 1)
-		this->_root = this->_nil;
+		this->_root = this->_head;
 	else if (target == this->_root)
 	{
 		this->_root = child;
@@ -291,9 +291,9 @@ void ft::RBtree<T, Compare, Allocator>::clear ( void )
 	if (this->_size == 0)
 		return ;
 	this->destroy_node(this->_root);
-	this->_root = this->_nil;
-	this->_root->child[RIGHT] = this->_nil;
-	this->_root->child[LEFT] = this->_nil;
+	this->_root = this->_head;
+	this->_root->child[RIGHT] = this->_head;
+	this->_root->child[LEFT] = this->_head;
 	this->_size = 0;
 }
 
@@ -311,13 +311,13 @@ void ft::RBtree<T, Compare, Allocator>::destroy_node ( node * node )
 template < class T, class Compare, class Allocator >
 void ft::RBtree<T, Compare, Allocator>::swap ( RBtree & other )
 {
-	node * tmp_nil		= this->_nil;
+	node * tmp_head		= this->_head;
 	node * tmp_root		= this->_root;
 	size_t tmp_size			= this->_size;
-	this->_nil				= other._nil;
+	this->_head				= other._head;
 	this->_root				= other._root;
 	this->_size				= other._size;
-	other._nil				= tmp_nil;
+	other._head				= tmp_head;
 	other._root				= tmp_root;
 	other._size				= tmp_size;
 }

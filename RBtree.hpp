@@ -23,7 +23,7 @@ namespace ft
 			class node;
 
 		protected:
-			node *													_nil;
+			node *													_head;
 			node *													_root;
 			size_t													_size;
 			compare													_comp;
