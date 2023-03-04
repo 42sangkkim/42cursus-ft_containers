@@ -49,7 +49,7 @@ namespace ft
 			map ( void );
 			explicit map ( const key_compare & comp, const allocator_type & alloc = allocator_type() );
 			template < class InputIt >
-			map ( InputIt first, InputIt last, const allocator_type & alloc = allocator_type() );
+			map ( InputIt first, InputIt last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() );
 			map ( const map & other );
 
 			~map ( void );

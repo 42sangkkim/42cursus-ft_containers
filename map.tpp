@@ -17,8 +17,8 @@ ft::map<Key, T, Compare, Allocator>::map ( const key_compare & comp, const alloc
 
 template < class Key, class T, class Compare, class Allocator>
 template < class InputIt >
-ft::map<Key, T, Compare, Allocator>::map ( InputIt first, InputIt last, const allocator_type & alloc )
-	: _tree(value_compare(key_compare()), alloc)
+ft::map<Key, T, Compare, Allocator>::map ( InputIt first, InputIt last, const key_compare & comp, const allocator_type & alloc )
+	: _tree(value_compare(key_compare(comp)), alloc)
 {
 	this->insert(first, last);
 }

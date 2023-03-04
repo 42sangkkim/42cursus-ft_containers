@@ -254,6 +254,8 @@ typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Alloca
 		following = temp;
 		if (target == this->_head->child[RIGHT]) // update first
 			this->_head->child[RIGHT] = following;
+		if (target == this->_head->child[LEFT]) // update last
+			this->_head->child[LEFT] = following;
 	}
 
 	node * parent = target->parent;
