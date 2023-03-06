@@ -250,7 +250,7 @@ template < class T, class A >
 void ft::vector<T, A>::clear ( void )
 {
 	for (; this->_size != 0; this->_size--)
-		this->_data[this->_size - 1].~value_type();
+		this->_alloc.destroy(this->_data + this->_size - 1);
 }
 
 template < class T, class A >
@@ -307,7 +307,7 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::erase ( iterator first, it
 
 	count = 0;
 	for (const_iterator it(first); it != last; it++, count++)
-		(*it).~value_type();
+		this->_alloc.destroy(*it);
 	memmove(first, last, (this->end() - last) * sizeof(value_type));
 	this->_size -= count;
 	return (first);
@@ -323,7 +323,7 @@ void ft::vector<T, A>::push_back ( const_reference value )
 template < class T, class A >
 void ft::vector<T, A>::pop_back ( void )
 {
-	this->_data[--this->_size].~value_type();
+	this->_alloc.destroy(this->_data + (--this->_size));
 }
 
 template < class T, class A >
@@ -332,7 +332,7 @@ void ft::vector<T, A>::resize ( size_type count, value_type value )
 	if (this->_size > count)
 	{
 		for (; this->_size != count; this->_size--)
-			this->_data[this->_size - 1].~value_type();
+			this->_alloc.destroy(this->_data + this->_size - 1);
 	}
 	else if (this->_size < count)
 	{

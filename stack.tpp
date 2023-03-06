@@ -58,7 +58,7 @@ void ft::stack<T, Container>::push ( const value_type & value )
 template < class T, class Container >
 void ft::stack<T, Container>::pop ( void )
 {
-	this->C.pop_back();
+	this->c.pop_back();
 }
 
 template < class T, class Container >
