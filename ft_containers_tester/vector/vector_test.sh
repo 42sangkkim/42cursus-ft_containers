@@ -6,7 +6,7 @@ make -s
 make -s clean
 make -s std
 
-printf "\033[0;35mvector test\033[0;0m\n\n"
+printf "\033[0;35mvector test\033[0;0m\n"
 if [ ! -e logs ] ; then
 	mkdir logs
 fi
