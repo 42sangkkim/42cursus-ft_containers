@@ -1,12 +1,12 @@
-#ifndef FT_CONTAINERS_RB_TREE_NODE_TPP
-# define FT_CONTAINERS_RB_TREE_NODE_TPP
+#ifndef FT_CONTAINERS_RED_BLACK_TREE_NODE_TPP
+# define FT_CONTAINERS_RED_BLACK_TREE_NODE_TPP
 
-# include "./RBtree_node.hpp"
+# include "./RedBlackTree_node.hpp"
 
 // node
 
 template < class T, class Compare, class Allocator >
-ft::RBtree<T, Compare, Allocator>::node::node ( void )
+ft::RedBlackTree<T, Compare, Allocator>::node::node ( void )
 	: value(), color(RED), parent(NULL)
 {
 	child[RIGHT] = NULL;
@@ -14,7 +14,7 @@ ft::RBtree<T, Compare, Allocator>::node::node ( void )
 }
 
 template < class T, class Compare, class Allocator >
-ft::RBtree<T, Compare, Allocator>::node::node ( const node & other )
+ft::RedBlackTree<T, Compare, Allocator>::node::node ( const node & other )
 	: value(other.value), color(other.color), parent(other.parent)
 {
 	child[RIGHT] = other.child[RIGHT];
@@ -22,7 +22,7 @@ ft::RBtree<T, Compare, Allocator>::node::node ( const node & other )
 }
 
 template < class T, class Compare, class Allocator >
-ft::RBtree<T, Compare, Allocator>::node::node ( const value_type & value )
+ft::RedBlackTree<T, Compare, Allocator>::node::node ( const value_type & value )
 	: value(value), color(RED), parent(NULL)
 {
 	child[RIGHT] = NULL;
@@ -30,11 +30,11 @@ ft::RBtree<T, Compare, Allocator>::node::node ( const value_type & value )
 }
 
 template < class T, class Compare, class Allocator >
-ft::RBtree<T, Compare, Allocator>::node::~node ( void )
+ft::RedBlackTree<T, Compare, Allocator>::node::~node ( void )
 {}
 
 template < class T, class Compare, class Allocator >
-typename ft::RBtree<T, Compare, Allocator>::node & ft::RBtree<T, Compare, Allocator>::node::operator = ( const node & other )
+typename ft::RedBlackTree<T, Compare, Allocator>::node & ft::RedBlackTree<T, Compare, Allocator>::node::operator = ( const node & other )
 {
 	this->value = other.value;
 	this->parent = other.parent;
@@ -44,7 +44,7 @@ typename ft::RBtree<T, Compare, Allocator>::node & ft::RBtree<T, Compare, Alloca
 }
 
 template < class T, class Compare, class Allocator >
-typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::node::prev ( void )
+typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::node::prev ( void )
 {
 	node * cur;
 	if (this->child[LEFT] != NULL)
@@ -65,7 +65,7 @@ typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Alloca
 }
 
 template < class T, class Compare, class Allocator >
-const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::node::prev ( void ) const
+const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::node::prev ( void ) const
 {
 	const node * cur;
 	if (this->child[LEFT] != NULL)
@@ -86,7 +86,7 @@ const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, 
 }
 
 template < class T, class Compare, class Allocator >
-typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::node::next ( void )
+typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::node::next ( void )
 {
 	node * cur;
 
@@ -108,7 +108,7 @@ typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Alloca
 }
 
 template < class T, class Compare, class Allocator >
-const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, Allocator>::node::next ( void ) const
+const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::node::next ( void ) const
 {
 	const node * cur;
 	if (this->child[RIGHT] != NULL)
@@ -128,4 +128,4 @@ const typename ft::RBtree<T, Compare, Allocator>::node * ft::RBtree<T, Compare, 
 	return cur;
 }
 
-#endif // FT_CONTAINERS_RB_TREE_NODE_TPP
+#endif // FT_CONTAINERS_RED_BLACK_TREE_NODE_TPP

@@ -3,7 +3,7 @@
 
 # include <memory>
 # include <functional>
-# include "./RBtree.hpp"
+# include "./RedBlackTree/RedBlackTree.hpp"
 # include "./reverse_iterator.hpp"
 # include "./pair.hpp"
 
@@ -34,8 +34,8 @@ namespace ft
 			typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 		protected:
-			typedef	typename ft::RBtree<value_type, value_compare, allocator_type>	tree_type;
-			typedef typename tree_type::node										node_type;
+			typedef	typename ft::RedBlackTree<Key, Compare, Allocator>	tree_type;
+			typedef typename tree_type::node							node_type;
 
 		protected:
 			// Member objects

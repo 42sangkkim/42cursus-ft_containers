@@ -1,14 +1,14 @@
-#ifndef FT_CONTAINERS_RB_TREE_HPP
-# define FT_CONTAINERS_RB_TREE_HPP
+#ifndef FT_CONTAINERS_RED_BLACK_TREE_HPP
+# define FT_CONTAINERS_RED_BLACK_TREE_HPP
 
 # include <functional>
 # include <memory>
-# include "./pair.hpp"
+# include "../pair.hpp"
 
 namespace ft
 {
 	template < class T, class Compare = std::less<T>, class Allocator = std::allocator<T> >
-	class RBtree
+	class RedBlackTree
 	{
 		public:
 			typedef T										value_type;
@@ -32,9 +32,9 @@ namespace ft
 
 		private:
 			// Never using
-			RBtree ( void );
-			explicit RBtree ( const RBtree & other );
-			RBtree & operator = ( const RBtree & other );
+			RedBlackTree ( void );
+			explicit RedBlackTree ( const RedBlackTree & other );
+			RedBlackTree & operator = ( const RedBlackTree & other );
 
 		protected:
 			void destroy_node ( node * node );
@@ -44,8 +44,8 @@ namespace ft
 			void extra_black ( node * target, node * parent);
 
 		public:
-			RBtree ( const compare & comp, const allocator_type & alloc );
-			~RBtree ( void );
+			RedBlackTree ( const compare & comp, const allocator_type & alloc );
+			~RedBlackTree ( void );
 
 			size_t size ( void ) const;
 			size_t max_size ( void ) const;
@@ -69,13 +69,13 @@ namespace ft
 			node * erase ( node * target );
 			void clear ( void );
 
-			void swap ( RBtree & other );
+			void swap ( RedBlackTree & other );
 
 	}; // class RBree
 } // namespace ft
 
-# include "./RBtree_node.hpp"
+# include "./RedBlackTree_node.hpp"
 
-# include "./RBtree.tpp"
+# include "./RedBlackTree.tpp"
 
-#endif // FT_CONTAINERS_RB_TREE_HPP
+#endif // FT_CONTAINERS_RED_BLACK_TREE_HPP

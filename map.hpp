@@ -3,7 +3,7 @@
 
 # include <memory>
 # include <functional>
-# include "./RBtree.hpp"
+# include "./RedBlackTree/RedBlackTree.hpp"
 # include "./pair.hpp"
 # include "./reverse_iterator.hpp"
 
@@ -38,11 +38,11 @@ namespace ft
 			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 		protected:
-			typedef RBtree<value_type, value_compare, Allocator>	tree_type;
-			typedef typename tree_type::node						node_type;
+			typedef RedBlackTree<value_type, value_compare, Allocator>	tree_type;
+			typedef typename tree_type::node							node_type;
 
 		protected:
-			tree_type											_tree;
+			tree_type												_tree;
 
 		public:
 			// Member functions
@@ -122,11 +122,24 @@ namespace ft
 	template < class Key, class T, class Compare, class Allocator >
 	void swap ( ft::map<Key, T, Compare, Allocator> & lhs, ft::map<Key, T, Compare, Allocator> & rhs );
 
+	template < class Key, class T, class Compare, class Allocator >
+	class ft::map<Key, T, Compare, Allocator>::value_compare : public std::binary_function< value_type, value_type, bool >
+	{
+		friend class ft::map<Key, T, Compare, Allocator>;
+		protected:
+			// Member objects
+			Compare comp;
+			// protected member functions
+			value_compare ( Compare c );
+
+		public:
+			// Member functions
+			bool operator () ( const value_type & lhs, const value_type & rhs ) const;
+	}; // class ft::map<Key, T, Compare, Allocator>::value_compare
+
 } // namespace ft
 
-# include "./map_value_compare.hpp"
 # include "./map_iterator.hpp"
-# include "./map_const_iterator.hpp"
 # include "./map.tpp"
 
 #endif // FT_CONTAINERS_MAP_HPP

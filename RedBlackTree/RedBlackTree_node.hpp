@@ -1,12 +1,12 @@
-#ifndef FT_CONTAINERS_RB_TREE_NODE_HPP
-# define FT_CONTAINERS_RB_TREE_NODE_HPP
+#ifndef FT_CONTAINERS_RED_BLACK_TREE_NODE_HPP
+# define FT_CONTAINERS_RED_BLACK_TREE_NODE_HPP
 
-# include "./RBtree.hpp"
+# include "./RedBlackTree.hpp"
 
 namespace ft
 {
 	template < class T, class Compare, class Allocator >
-	class ft::RBtree<T, Compare, Allocator>::node
+	class ft::RedBlackTree<T, Compare, Allocator>::node
 	{
 		public:
 			// Member objects
@@ -33,6 +33,6 @@ namespace ft
 	}; // class node
 } // namespace ft
 
-# include "./RBtree_node.tpp"
+# include "./RedBlackTree_node.tpp"
 
-#endif // FT_CONTAINERS_RB_TREE_NODE_HPP
+#endif // FT_CONTAINERS_RED_BLACK_TREE_NODE_HPP
