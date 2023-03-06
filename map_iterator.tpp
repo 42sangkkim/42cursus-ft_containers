@@ -113,8 +113,8 @@ ft::map<Key, T, Compare, Allocator>::const_iterator::const_iterator ( const cons
 {}
 
 template < class Key, class T, class Compare, class Allocator>
-ft::map<Key, T, Compare, Allocator>::const_iterator::const_iterator ( const iterator & it )
-	: _cur(it._cur)
+ft::map<Key, T, Compare, Allocator>::const_iterator::const_iterator ( const iterator & iter )
+	: _cur(iter._cur)
 {}
 
 template < class Key, class T, class Compare, class Allocator>

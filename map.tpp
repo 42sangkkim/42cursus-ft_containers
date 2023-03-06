@@ -183,14 +183,9 @@ typename ft::map<Key, T, Compare, Allocator>::iterator ft::map<Key, T, Compare, 
 template < class Key, class T, class Compare, class Allocator>
 typename ft::map<Key, T, Compare, Allocator>::iterator ft::map<Key, T, Compare, Allocator>::erase ( iterator first, iterator last )
 {
-	iterator iter = last;
-	iter--;
-	while (iter != first)
-		this->erase(iter--);
-	this->erase(iter--);
-	if (this->size() != 0)
-		++iter;
-	return iter;
+	while (first != last)
+		first = erase(first);
+	return last;
 }
 
 template < class Key, class T, class Compare, class Allocator>

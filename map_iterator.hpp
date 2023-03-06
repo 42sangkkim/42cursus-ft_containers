@@ -8,9 +8,6 @@ namespace ft
 	template < class Key, class T, class Compare, class Allocator >
 	class ft::map<Key, T, Compare, Allocator>::iterator
 	{
-		friend class ft::map<Key, T, Compare, Allocator>;
-		friend class ft::map<Key, T, Compare, Allocator>::const_iterator;
-
 		public:
 			// public member types
 			typedef ft::pair<const Key, T>				value_type;
@@ -19,7 +16,7 @@ namespace ft
 			typedef value_type &						reference;
 			typedef std::bidirectional_iterator_tag		iterator_category;
 
-		protected:
+		public:
 			node_type									*_cur;
 
 		public:
@@ -43,14 +40,12 @@ namespace ft
 			iterator operator ++ ( int n );
 			iterator & operator -- ( void );
 			iterator operator -- ( int n );
+
 	}; // class ft::map<Key, T, Compare, Allocator>::iterator;
 
 	template < class Key, class T, class Compare, class Allocator >
 	class ft::map<Key, T, Compare, Allocator>::const_iterator
 	{
-		friend class ft::map<Key, T, Compare, Allocator>;
-		friend class ft::map<Key, T, Compare, Allocator>::iterator;
-
 		public:
 			// public member types
 			typedef ft::pair<const Key, T>				value_type;
@@ -59,7 +54,7 @@ namespace ft
 			typedef const value_type &					reference;
 			typedef std::bidirectional_iterator_tag		iterator_category;
 
-		protected:
+		public:
 			const node_type								*_cur;
 
 		public:

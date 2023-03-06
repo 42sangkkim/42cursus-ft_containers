@@ -8,8 +8,6 @@ namespace ft
 	template < class Key, class Compare, class Allocator >
 	class ft::set<Key, Compare, Allocator>::iterator
 	{
-		friend class ft::set<Key, Compare, Allocator>;
-
 		public:
 			// public member types
 			typedef const Key							value_type;
