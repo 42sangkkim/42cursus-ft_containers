@@ -306,8 +306,8 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::erase ( iterator first, it
 	size_type	count;
 
 	count = 0;
-	for (const_iterator it(first); it != last; it++, count++)
-		this->_alloc.destroy(*it);
+	for (iterator it(first); it != last; it++, count++)
+		this->_alloc.destroy(it);
 	memmove(first, last, (this->end() - last) * sizeof(value_type));
 	this->_size -= count;
 	return (first);
