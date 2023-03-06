@@ -18,7 +18,7 @@ namespace ft
 
 		protected:
 			// Member objects
-			Container										C;
+			Container										c;
 
 		public:
 			// Member functions

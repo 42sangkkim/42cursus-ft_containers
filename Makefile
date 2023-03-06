@@ -5,7 +5,7 @@ SRCS := main.cpp
 OBJS := $(SRCS:.cpp=.o)
 DEPS := $(SRCS:.cpp=.d)
 
-FT_DIR := ./ft
+FT_DIR := ./
 
 CXX := c++
 CXXFLAGS := -Wall -Wextra -Werror -std=c++98
