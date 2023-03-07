@@ -8,7 +8,7 @@ ft::RedBlackTree<T, Compare, Allocator>::RedBlackTree ( const compare & comp, co
 	: _size(0), _comp(comp), _alloc(alloc), _node_alloc()
 {
 	this->_head = this->_node_alloc.allocate(1);
-	this->_node_alloc.construct(this->_head, node());
+	this->_node_alloc.construct(this->_head, node_type());
 	this->_head->child[RIGHT] = this->_head;
 	this->_head->child[LEFT] = this->_head;
 	this->_root = this->_head;
@@ -31,37 +31,37 @@ size_t ft::RedBlackTree<T, Compare, Allocator>::size ( void ) const
 template < class T, class Compare, class Allocator >
 size_t ft::RedBlackTree<T, Compare, Allocator>::max_size ( void ) const
 {
-	return (std::numeric_limits<size_t>::max() / sizeof(node));
+	return (std::numeric_limits<size_t>::max() / sizeof(node_type));
 }
 
 template < class T, class Compare, class Allocator >
-typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::begin ( void )
+ typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::begin ( void )
 {
 	return this->_head->child[RIGHT];
 }
 
 template < class T, class Compare, class Allocator >
-const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::begin ( void ) const
+const typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::begin ( void ) const
 {
 	return this->_head->child[RIGHT];
 }
 
 template < class T, class Compare, class Allocator >
-typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::end ( void )
+typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::end ( void )
 {
 	return this->_head;
 }
 
 template < class T, class Compare, class Allocator >
-const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::end ( void ) const
+const typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::end ( void ) const
 {
 	return this->_head;
 }
 
 template < class T, class Compare, class Allocator >
-typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::find ( const value_type & value )
+typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::find ( const value_type & value )
 {
-	node * cur = this->_root;
+	node_type * cur = this->_root;
 
 	if (cur == this->_head)
 		return this->_head;
@@ -78,9 +78,9 @@ typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Com
 }
 
 template < class T, class Compare, class Allocator >
-const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::find ( const value_type & value ) const
+const typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::find ( const value_type & value ) const
 {
-	const node * cur = this->_root;
+	const node_type * cur = this->_root;
 
 	if (cur == this->_head)
 		return this->_head;
@@ -97,10 +97,10 @@ const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<
 }
 
 template < class T, class Compare, class Allocator >
-typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::lower_bound ( const value_type & value )
+typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::lower_bound ( const value_type & value )
 {
-	node * cur = this->_root;
-	node * tmp = this->_head;
+	node_type * cur = this->_root;
+	node_type * tmp = this->_head;
 
 	if (cur == this->_head)
 		return this->_head;
@@ -120,10 +120,10 @@ typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Com
 }
 
 template < class T, class Compare, class Allocator >
-const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::lower_bound ( const value_type & value ) const
+const typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::lower_bound ( const value_type & value ) const
 {
-	const node * cur = this->_root;
-	const node * tmp = this->_head;
+	const node_type * cur = this->_root;
+	const node_type * tmp = this->_head;
 
 	if (cur == this->_head)
 		return this->_head;
@@ -143,10 +143,10 @@ const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<
 }
 
 template < class T, class Compare, class Allocator >
-typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::upper_bound ( const value_type & value )
+typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::upper_bound ( const value_type & value )
 {
-	node * cur = this->_root;
-	node * tmp = this->_head;
+	node_type * cur = this->_root;
+	node_type * tmp = this->_head;
 
 	if (cur == this->_head)
 		return this->_head;
@@ -164,10 +164,10 @@ typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Com
 }
 
 template < class T, class Compare, class Allocator >
-const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::upper_bound ( const value_type & value ) const
+const typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::upper_bound ( const value_type & value ) const
 {
-	const node * cur = this->_root;
-	const node * tmp = this->_head;
+	const node_type * cur = this->_root;
+	const node_type * tmp = this->_head;
 
 	if (cur == this->_head)
 		return this->_head;
@@ -185,14 +185,14 @@ const typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<
 }
 
 template < class T, class Compare, class Allocator >
-ft::pair<typename ft::RedBlackTree<T, Compare, Allocator>::node *, bool> ft::RedBlackTree<T, Compare, Allocator>::insert ( const value_type & value )
+ft::pair<typename ft::RedBlackNode<T> *, bool> ft::RedBlackTree<T, Compare, Allocator>::insert ( const value_type & value )
 {
-	node *	cur = this->_root;
+	node_type *	cur = this->_root;
 
 	if (cur == this->_head) // size == 0
 	{
 		this->_root = this->_node_alloc.allocate(1);
-		this->_node_alloc.construct(this->_root, node(value));
+		this->_node_alloc.construct(this->_root, node_type(value));
 		this->_size += 1;
 		this->_head->child[LEFT] = this->_root;
 		this->_head->child[RIGHT] = this->_root;
@@ -216,7 +216,7 @@ ft::pair<typename ft::RedBlackTree<T, Compare, Allocator>::node *, bool> ft::Red
 		else
 		{
 			cur->child[dir] = this->_node_alloc.allocate(1);
-			this->_node_alloc.construct(cur->child[dir], node(value));
+			this->_node_alloc.construct(cur->child[dir], node_type(value));
 			cur->child[dir]->parent = cur;
 			cur = cur->child[dir];
 			this->_size += 1;
@@ -233,9 +233,9 @@ ft::pair<typename ft::RedBlackTree<T, Compare, Allocator>::node *, bool> ft::Red
 }
 
 template < class T, class Compare, class Allocator >
-typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Compare, Allocator>::erase ( node * target )
+typename ft::RedBlackNode<T> * ft::RedBlackTree<T, Compare, Allocator>::erase ( node_type * target )
 {
-	node * following = target->next();
+	node_type * following = target->next();
 
 	if (target == this->_head)
 		return this->_head;
@@ -248,7 +248,7 @@ typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Com
 
 	if (target->child[RIGHT] != NULL) // following->child[LEFT] = NULL
 	{
-		node *temp_node[3];
+		node_type * temp_node[3];
 		color_t temp_color = target->color;
 		temp_node[0] = target->parent;
 		temp_node[1] = target->child[LEFT];
@@ -286,8 +286,8 @@ typename ft::RedBlackTree<T, Compare, Allocator>::node * ft::RedBlackTree<T, Com
 		}
 	}
 
-	node * parent = target->parent;
-	node * child = (target->child[LEFT] == NULL ? target->child[RIGHT] : target->child[LEFT]);
+	node_type * parent = target->parent;
+	node_type * child = (target->child[LEFT] == NULL ? target->child[RIGHT] : target->child[LEFT]);
 	if (this->_size == 1)
 		this->_root = this->_head;
 	else if (target == this->_root)
@@ -328,7 +328,7 @@ void ft::RedBlackTree<T, Compare, Allocator>::clear ( void )
 }
 
 template < class T, class Compare, class Allocator >
-void ft::RedBlackTree<T, Compare, Allocator>::destroy_node ( node * node )
+void ft::RedBlackTree<T, Compare, Allocator>::destroy_node ( node_type * node )
 {
 	if (node->child[RIGHT] != NULL)
 		this->destroy_node(node->child[RIGHT]);
@@ -341,8 +341,8 @@ void ft::RedBlackTree<T, Compare, Allocator>::destroy_node ( node * node )
 template < class T, class Compare, class Allocator >
 void ft::RedBlackTree<T, Compare, Allocator>::swap ( RedBlackTree & other )
 {
-	node * tmp_head		= this->_head;
-	node * tmp_root		= this->_root;
+	node_type * tmp_head		= this->_head;
+	node_type * tmp_root		= this->_root;
 	size_t tmp_size			= this->_size;
 	this->_head				= other._head;
 	this->_root				= other._root;
@@ -353,10 +353,10 @@ void ft::RedBlackTree<T, Compare, Allocator>::swap ( RedBlackTree & other )
 }
 
 template < class T, class Compare, class Allocator >
-void ft::RedBlackTree<T, Compare, Allocator>::rotate ( node * target, dir_t dir)
+void ft::RedBlackTree<T, Compare, Allocator>::rotate ( node_type * target, dir_t dir)
 {
-	node * child = target->child[(dir == LEFT ? RIGHT : LEFT)];
-	node * parent = target->parent;
+	node_type * child = target->child[(dir == LEFT ? RIGHT : LEFT)];
+	node_type * parent = target->parent;
 
 	// link [target - child.child]
 	target->child[(dir == LEFT ? RIGHT : LEFT)] = child->child[dir];
@@ -378,15 +378,15 @@ void ft::RedBlackTree<T, Compare, Allocator>::rotate ( node * target, dir_t dir)
 }
 
 template < class T, class Compare, class Allocator >
-void ft::RedBlackTree<T, Compare, Allocator>::check_double_red ( node * target )
+void ft::RedBlackTree<T, Compare, Allocator>::check_double_red ( node_type * target )
 {
 	while (true)
 	{
 		if (target->parent->color == BLACK)
 			return ;
-		node * parent = target->parent;
-		node * grand = parent->parent;
-		node * uncle = (parent == grand->child[RIGHT] ? grand->child[LEFT] : grand->child[RIGHT]);
+		node_type * parent = target->parent;
+		node_type * grand = parent->parent;
+		node_type * uncle = (parent == grand->child[RIGHT] ? grand->child[LEFT] : grand->child[RIGHT]);
 
 		if (uncle == NULL || uncle->color == BLACK)
 		{
@@ -413,7 +413,7 @@ void ft::RedBlackTree<T, Compare, Allocator>::check_double_red ( node * target )
 }
 
 template < class T, class Compare, class Allocator >
-void ft::RedBlackTree<T, Compare, Allocator>::extra_black ( node * target, node * parent )
+void ft::RedBlackTree<T, Compare, Allocator>::extra_black ( node_type * target, node_type * parent )
 {
 	while (true)
 	{
@@ -430,9 +430,9 @@ void ft::RedBlackTree<T, Compare, Allocator>::extra_black ( node * target, node 
 		// doubly black
 		dir_t dir = (parent->child[LEFT] == target ? LEFT : RIGHT);
 		dir_t revDir = (dir == LEFT ? RIGHT : LEFT);
-		node * sibling = parent->child[revDir];
-		node * close   = sibling->child[dir];
-		node * distant = sibling->child[revDir];
+		node_type * sibling = parent->child[revDir];
+		node_type * close   = sibling->child[dir];
+		node_type * distant = sibling->child[revDir];
 
 		int doubly_black_case;
 		if (distant != NULL && distant->color == RED)

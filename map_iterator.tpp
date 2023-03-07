@@ -3,188 +3,187 @@
 
 # include "./map_iterator.hpp"
 
-// ft::map::iterator
+// ft::map_iterator
 
-template < class Key, class T, class Compare, class Allocator >
-ft::map<Key, T, Compare, Allocator>::iterator::iterator ( void )
+template < class Key, class T >
+ft::map_iterator<Key, T>::map_iterator ( void )
 	: _cur(NULL)
 {}
 
-template < class Key, class T, class Compare, class Allocator >
-ft::map<Key, T, Compare, Allocator>::iterator::iterator ( const iterator & other )
+template < class Key, class T >
+ft::map_iterator<Key, T>::map_iterator ( const map_iterator & other )
 	: _cur(other._cur)
 {}
 
-template < class Key, class T, class Compare, class Allocator >
-ft::map<Key, T, Compare, Allocator>::iterator::iterator ( node_type * cur )
+template < class Key, class T >
+ft::map_iterator<Key, T>::map_iterator ( node_type * cur )
 	: _cur(cur)
 {}
 
-template < class Key, class T, class Compare, class Allocator >
-ft::map<Key, T, Compare, Allocator>::iterator::~iterator ( void )
+template < class Key, class T >
+ft::map_iterator<Key, T>::~map_iterator ( void )
 {}
 
-template < class Key, class T, class Compare, class Allocator >
-typename ft::map<Key, T, Compare, Allocator>::iterator & ft::map<Key, T, Compare, Allocator>::iterator::operator = ( const iterator & other )
+template < class Key, class T >
+typename ft::map_iterator<Key, T> & ft::map_iterator<Key, T>::operator = ( const map_iterator & other )
 {
 	this->_cur = other._cur;
 	return *this;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-bool ft::map<Key, T, Compare, Allocator>::iterator::operator == ( const iterator & other ) const
+template < class Key, class T >
+bool ft::map_iterator<Key, T>::operator == ( const map_iterator & other ) const
 {
 	return (this->_cur == other._cur);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-bool ft::map<Key, T, Compare, Allocator>::iterator::operator != ( const iterator & other ) const
+template < class Key, class T >
+bool ft::map_iterator<Key, T>::operator != ( const map_iterator & other ) const
 {
 	return !(this->operator==(other));
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename ft::map<Key, T, Compare, Allocator>::value_type & ft::map<Key, T, Compare, Allocator>::iterator::operator * ( void )
+template < class Key, class T >
+typename ft::map_iterator<Key, T>::value_type & ft::map_iterator<Key, T>::operator * ( void )
 {
 	return this->_cur->value;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-const typename ft::map<Key, T, Compare, Allocator>::value_type & ft::map<Key, T, Compare, Allocator>::iterator::operator * ( void ) const
+template < class Key, class T >
+const typename ft::map_iterator<Key, T>::value_type & ft::map_iterator<Key, T>::operator * ( void ) const
 {
 	return this->_cur->value;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename ft::map<Key, T, Compare, Allocator>::value_type * ft::map<Key, T, Compare, Allocator>::iterator::operator -> ( void )
+template < class Key, class T >
+typename ft::map_iterator<Key, T>::value_type * ft::map_iterator<Key, T>::operator -> ( void )
 {
 	return &this->_cur->value;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-const typename ft::map<Key, T, Compare, Allocator>::value_type * ft::map<Key, T, Compare, Allocator>::iterator::operator -> ( void ) const
+template < class Key, class T >
+const typename ft::map_iterator<Key, T>::value_type * ft::map_iterator<Key, T>::operator -> ( void ) const
 {
 	return &this->_cur->value;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename ft::map<Key, T, Compare, Allocator>::iterator & ft::map<Key, T, Compare, Allocator>::iterator::operator ++ ( void )
+template < class Key, class T >
+typename ft::map_iterator<Key, T> & ft::map_iterator<Key, T>::operator ++ ( void )
 {
 	this->_cur = this->_cur->next();
 	return *this;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename ft::map<Key, T, Compare, Allocator>::iterator ft::map<Key, T, Compare, Allocator>::iterator::operator ++ ( int n )
+template < class Key, class T >
+typename ft::map_iterator<Key, T> ft::map_iterator<Key, T>::operator ++ ( int n )
 {
 	(void)n;
-	iterator iter = *this;
+	map_iterator iter = *this;
 	this->operator++();
 	return iter;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename ft::map<Key, T, Compare, Allocator>::iterator & ft::map<Key, T, Compare, Allocator>::iterator::operator -- ( void )
+template < class Key, class T >
+typename ft::map_iterator<Key, T> & ft::map_iterator<Key, T>::operator -- ( void )
 {
 	this->_cur = this->_cur->prev();
 	return *this;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename ft::map<Key, T, Compare, Allocator>::iterator ft::map<Key, T, Compare, Allocator>::iterator::operator -- ( int n )
+template < class Key, class T >
+typename ft::map_iterator<Key, T> ft::map_iterator<Key, T>::operator -- ( int n )
 {
 	(void)n;
-	iterator iter = *this;
+	map_iterator iter = *this;
 	this->operator--();
 	return iter;
 }
 
+// ft::const_map_iterator
 
-// ft::map::const_iterator
-
-template < class Key, class T, class Compare, class Allocator>
-ft::map<Key, T, Compare, Allocator>::const_iterator::const_iterator ( void )
+template < class Key, class T >
+ft::const_map_iterator<Key, T>::const_map_iterator ( void )
 	: _cur(NULL)
 {}
 
-template < class Key, class T, class Compare, class Allocator>
-ft::map<Key, T, Compare, Allocator>::const_iterator::const_iterator ( const const_iterator & other )
+template < class Key, class T >
+ft::const_map_iterator<Key, T>::const_map_iterator ( const const_map_iterator & other )
 	: _cur(other._cur)
 {}
 
-template < class Key, class T, class Compare, class Allocator>
-ft::map<Key, T, Compare, Allocator>::const_iterator::const_iterator ( const iterator & iter )
-	: _cur(iter._cur)
-{}
-
-template < class Key, class T, class Compare, class Allocator>
-ft::map<Key, T, Compare, Allocator>::const_iterator::const_iterator ( const node_type * cur )
+template < class Key, class T >
+ft::const_map_iterator<Key, T>::const_map_iterator ( const node_type * cur )
 	: _cur(cur)
 {}
 
-template < class Key, class T, class Compare, class Allocator>
-ft::map<Key, T, Compare, Allocator>::const_iterator::~const_iterator ( void )
+template < class Key, class T >
+ft::const_map_iterator<Key, T>::const_map_iterator ( const ft::map_iterator<Key, T> & iter )
+	: _cur(iter._cur)
 {}
 
-template < class Key, class T, class Compare, class Allocator>
-typename ft::map<Key, T, Compare, Allocator>::const_iterator & ft::map<Key, T, Compare, Allocator>::const_iterator::operator = ( const const_iterator & other )
+template < class Key, class T >
+ft::const_map_iterator<Key, T>::~const_map_iterator ( void )
+{}
+
+template < class Key, class T >
+typename ft::const_map_iterator<Key, T> & ft::const_map_iterator<Key, T>::operator = ( const const_map_iterator & other )
 {
 	this->_cur = other._cur;
 	return *this;
 }
 
-template < class Key, class T, class Compare, class Allocator>
-bool ft::map<Key, T, Compare, Allocator>::const_iterator::operator == ( const const_iterator & other ) const
+template < class Key, class T >
+bool ft::const_map_iterator<Key, T>::operator == ( const const_map_iterator & other ) const
 {
 	return (this->_cur == other._cur);
 }
 
-template < class Key, class T, class Compare, class Allocator>
-bool ft::map<Key, T, Compare, Allocator>::const_iterator::operator != ( const const_iterator & other ) const
+template < class Key, class T >
+bool ft::const_map_iterator<Key, T>::operator != ( const const_map_iterator & other ) const
 {
 	return !(this->operator==(other));
 }
 
-template < class Key, class T, class Compare, class Allocator>
-const typename ft::map<Key, T, Compare, Allocator>::value_type & ft::map<Key, T, Compare, Allocator>::const_iterator::operator * ( void ) const
+template < class Key, class T >
+const typename ft::const_map_iterator<Key, T>::value_type & ft::const_map_iterator<Key, T>::operator * ( void ) const
 {
 	return this->_cur->value;
 }
 
-template < class Key, class T, class Compare, class Allocator>
-const typename ft::map<Key, T, Compare, Allocator>::value_type * ft::map<Key, T, Compare, Allocator>::const_iterator::operator -> ( void ) const
+template < class Key, class T >
+const typename ft::const_map_iterator<Key, T>::value_type * ft::const_map_iterator<Key, T>::operator -> ( void ) const
 {
 	return &this->_cur->value;
 }
 
-template < class Key, class T, class Compare, class Allocator>
-typename ft::map<Key, T, Compare, Allocator>::const_iterator & ft::map<Key, T, Compare, Allocator>::const_iterator::operator ++ ( void )
+template < class Key, class T >
+typename ft::const_map_iterator<Key, T> & ft::const_map_iterator<Key, T>::operator ++ ( void )
 {
 	this->_cur = this->_cur->next();
 	return *this;
 }
 
-template < class Key, class T, class Compare, class Allocator>
-typename ft::map<Key, T, Compare, Allocator>::const_iterator ft::map<Key, T, Compare, Allocator>::const_iterator::operator ++ ( int n )
+template < class Key, class T >
+typename ft::const_map_iterator<Key, T> ft::const_map_iterator<Key, T>::operator ++ ( int n )
 {
 	(void)n;
-	const_iterator iter = *this;
+	const_map_iterator iter = *this;
 	this->operator++();
 	return iter;
 }
 
-template < class Key, class T, class Compare, class Allocator>
-typename ft::map<Key, T, Compare, Allocator>::const_iterator & ft::map<Key, T, Compare, Allocator>::const_iterator::operator -- ( void )
+template < class Key, class T >
+typename ft::const_map_iterator<Key, T> & ft::const_map_iterator<Key, T>::operator -- ( void )
 {
 	this->_cur = this->_cur->prev();
 	return *this;
 }
 
-template < class Key, class T, class Compare, class Allocator>
-typename ft::map<Key, T, Compare, Allocator>::const_iterator ft::map<Key, T, Compare, Allocator>::const_iterator::operator -- ( int n )
+template < class Key, class T >
+typename ft::const_map_iterator<Key, T> ft::const_map_iterator<Key, T>::operator -- ( int n )
 {
 	(void)n;
-	const_iterator iter = *this;
+	const_map_iterator iter = *this;
 	this->operator--();
 	return iter;
 }

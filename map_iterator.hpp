@@ -5,78 +5,84 @@
 
 namespace ft
 {
-	template < class Key, class T, class Compare, class Allocator >
-	class ft::map<Key, T, Compare, Allocator>::iterator
+	template < class Key, class T >
+	class map_iterator
 	{
 		public:
-			// public member types
-			typedef ft::pair<const Key, T>				value_type;
-			typedef std::ptrdiff_t						difference_type;
-			typedef value_type *						pointer;
-			typedef value_type &						reference;
-			typedef std::bidirectional_iterator_tag		iterator_category;
+			typedef ft::pair<const Key, T>					value_type;
+			typedef std::ptrdiff_t							difference_type;
+			typedef value_type *							pointer;
+			typedef value_type &							reference;
+			typedef std::bidirectional_iterator_tag			iterator_category;
+
+		protected:
+			typedef typename ft::RedBlackNode<value_type>	node_type;
 
 		public:
-			node_type									*_cur;
+			node_type *										_cur;
 
 		public:
 			// public member functions
-			iterator ( void );
-			iterator ( const iterator & other );
-			iterator ( node_type * cur );
-			~iterator ( void );
+			map_iterator ( void );
+			map_iterator ( const map_iterator & other );
+			map_iterator ( node_type * cur );
+			virtual ~map_iterator ( void );
 
-			iterator & operator = ( const iterator & other );
+			map_iterator & operator = ( const map_iterator & other );
 
-			bool operator == ( const iterator & other ) const;
-			bool operator != ( const iterator & other ) const;
+			bool operator == ( const map_iterator & other ) const;
+			bool operator != ( const map_iterator & other ) const;
 
 			value_type & operator * ( void );
 			const value_type & operator * ( void ) const;
 			value_type * operator -> ( void );
 			const value_type * operator -> ( void ) const;
 
-			iterator & operator ++ ( void );
-			iterator operator ++ ( int n );
-			iterator & operator -- ( void );
-			iterator operator -- ( int n );
+			map_iterator & operator ++ ( void );
+			map_iterator operator ++ ( int n );
+			map_iterator & operator -- ( void );
+			map_iterator operator -- ( int n );
 
-	}; // class ft::map<Key, T, Compare, Allocator>::iterator;
+	}; // map_iterator
 
-	template < class Key, class T, class Compare, class Allocator >
-	class ft::map<Key, T, Compare, Allocator>::const_iterator
+	template < class Key, class T >
+	class const_map_iterator
 	{
 		public:
 			// public member types
-			typedef ft::pair<const Key, T>				value_type;
-			typedef std::ptrdiff_t						difference_type;
-			typedef const value_type *					pointer;
-			typedef const value_type &					reference;
-			typedef std::bidirectional_iterator_tag		iterator_category;
+			typedef ft::pair<const Key, T>					value_type;
+			typedef std::ptrdiff_t							difference_type;
+			typedef const value_type *						pointer;
+			typedef const value_type &						reference;
+			typedef std::bidirectional_iterator_tag			iterator_category;
+		protected:
+			typedef typename ft::RedBlackNode<value_type>	node_type;
 
 		public:
-			const node_type								*_cur;
+			const node_type *								_cur;
 
 		public:
-			const_iterator ( void );
-			const_iterator ( const const_iterator & other );
-			const_iterator ( const iterator & it );
-			const_iterator ( const node_type * cur );
-			~const_iterator ( void );
+			// public member functions
+			const_map_iterator ( void );
+			const_map_iterator ( const const_map_iterator & other );
+			const_map_iterator ( const node_type * cur );
+			const_map_iterator ( const ft::map_iterator<Key, T> & iter );
+			~const_map_iterator ( void );
 
-			const_iterator & operator = ( const const_iterator & other );
+			const_map_iterator & operator = ( const const_map_iterator & other );
 
-			bool operator == ( const const_iterator & other ) const;
-			bool operator != ( const const_iterator & other ) const;
+			bool operator == ( const const_map_iterator & other ) const;
+			bool operator != ( const const_map_iterator & other ) const;
 
 			const value_type & operator * ( void ) const;
 			const value_type * operator -> ( void ) const;
 
-			const_iterator & operator ++ ( void );
-			const_iterator operator ++ ( int n );
-			const_iterator & operator -- ( void );
-			const_iterator operator -- ( int n );
-	}; // class ft::map<Key, T, Compare, Allocator>::const_iterator;
+			const_map_iterator & operator ++ ( void );
+			const_map_iterator operator ++ ( int n );
+			const_map_iterator & operator -- ( void );
+			const_map_iterator operator -- ( int n );
+
+	}; // class map_const_iterator
 
 } // namespace ft
 

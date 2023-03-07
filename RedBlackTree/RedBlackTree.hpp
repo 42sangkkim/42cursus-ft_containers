@@ -5,6 +5,8 @@
 # include <memory>
 # include "../pair.hpp"
 
+# include "./RedBlackNode.hpp"
+
 namespace ft
 {
 	template < class T, class Compare = std::less<T>, class Allocator = std::allocator<T> >
@@ -14,21 +16,15 @@ namespace ft
 			typedef T										value_type;
 			typedef Compare									compare;
 			typedef Allocator								allocator_type;
+			typedef ft::RedBlackNode<T>						node_type;
 
 		protected:
-			enum dir_t   { LEFT = 0, RIGHT, };
-			enum color_t { RED  = 0, BLACK, };
-
-		public:
-			class node;
-
-		protected:
-			node *													_head;
-			node *													_root;
+			node_type *												_head;
+			node_type *												_root;
 			size_t													_size;
 			compare													_comp;
 			allocator_type											_alloc;
-			typename Allocator::template rebind<node>:: other		_node_alloc;
+			typename Allocator::template rebind<node_type>:: other		_node_alloc;
 
 		private:
 			// Never using
@@ -37,11 +33,11 @@ namespace ft
 			RedBlackTree & operator = ( const RedBlackTree & other );
 
 		protected:
-			void destroy_node ( node * node );
+			void destroy_node ( node_type * node );
 
-			void rotate ( node * target, dir_t dir );
-			void check_double_red ( node * target );
-			void extra_black ( node * target, node * parent);
+			void rotate ( node_type * target, dir_t dir );
+			void check_double_red ( node_type * target );
+			void extra_black ( node_type * target, node_type * parent);
 
 		public:
 			RedBlackTree ( const compare & comp, const allocator_type & alloc );
@@ -50,31 +46,29 @@ namespace ft
 			size_t size ( void ) const;
 			size_t max_size ( void ) const;
 
-			node * begin ( void );
-			const node * begin ( void ) const;
+			node_type * begin ( void );
+			const node_type * begin ( void ) const;
 
-			node * end ( void );
-			const node * end ( void ) const;
+			node_type * end ( void );
+			const node_type * end ( void ) const;
 
-			node * find ( const value_type & value );
-			const node * find ( const value_type & value ) const;
+			node_type * find ( const value_type & value );
+			const node_type * find ( const value_type & value ) const;
 
-			node * lower_bound ( const value_type & value );
-			const node * lower_bound ( const value_type & value ) const;
+			node_type * lower_bound ( const value_type & value );
+			const node_type * lower_bound ( const value_type & value ) const;
 
-			node * upper_bound ( const value_type & value );
-			const node * upper_bound ( const value_type & value ) const;
+			node_type * upper_bound ( const value_type & value );
+			const node_type * upper_bound ( const value_type & value ) const;
 
-			ft::pair<node *, bool> insert ( const value_type & value );
-			node * erase ( node * target );
+			ft::pair<node_type *, bool> insert ( const value_type & value );
+			node_type * erase ( node_type * target );
 			void clear ( void );
 
 			void swap ( RedBlackTree & other );
 
 	}; // class RBree
 } // namespace ft
-
-# include "./RedBlackTree_node.hpp"
 
 # include "./RedBlackTree.tpp"
 

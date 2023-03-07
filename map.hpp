@@ -7,7 +7,7 @@
 # include "./pair.hpp"
 # include "./reverse_iterator.hpp"
 
-#include<map>
+#include "./map_iterator.hpp"
 
 namespace ft
 {
@@ -32,14 +32,14 @@ namespace ft
 			typedef const value_type &								const_reference;
 			typedef typename Allocator::pointer						pointer;
 			typedef typename Allocator::const_pointer				const_pointer;
-			class													iterator;
-			class													const_iterator;	
+			typedef ft::map_iterator<Key, T>						iterator;
+			typedef ft::const_map_iterator<Key, T>					const_iterator;
 			typedef ft::reverse_iterator<iterator>					reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 		protected:
 			typedef RedBlackTree<value_type, value_compare, Allocator>	tree_type;
-			typedef typename tree_type::node							node_type;
+			typedef typename tree_type::node_type						node_type;
 
 		protected:
 			tree_type												_tree;
@@ -139,7 +139,6 @@ namespace ft
 
 } // namespace ft
 
-# include "./map_iterator.hpp"
 # include "./map.tpp"
 
 #endif // FT_CONTAINERS_MAP_HPP
