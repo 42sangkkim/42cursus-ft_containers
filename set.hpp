@@ -7,6 +7,8 @@
 # include "./reverse_iterator.hpp"
 # include "./pair.hpp"
 
+# include "./set_iterator.hpp"
+
 namespace ft
 {
 	template < 
@@ -28,14 +30,14 @@ namespace ft
 			typedef typename Allocator::const_pointer				const_pointer;
 			typedef value_type &									reference;
 			typedef const value_type &								const_reference;
-			class													iterator;
+			typedef typename ft::set_iterator<Key>					iterator;
 			typedef iterator										const_iterator;
 			typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
 			typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 		protected:
 			typedef	typename ft::RedBlackTree<Key, Compare, Allocator>	tree_type;
-			typedef typename tree_type::node							node_type;
+			typedef typename tree_type::node_type						node_type;
 
 		protected:
 			// Member objects
@@ -116,7 +118,6 @@ namespace ft
 } // namespace ft
 
 // # include "./set_iterator.hpp"
-# include "./set_iterator.hpp"
 # include "./set.tpp"
 
 #endif // FT_CONTAINERS_SET_HPP

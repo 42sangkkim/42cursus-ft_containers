@@ -5,40 +5,44 @@
 
 namespace ft
 {
-	template < class Key, class Compare, class Allocator >
-	class ft::set<Key, Compare, Allocator>::iterator
+	template < class Key >
+	class set_iterator
 	{
 		public:
 			// public member types
-			typedef const Key							value_type;
-			typedef std::ptrdiff_t						difference_type;
-			typedef value_type *						pointer;
-			typedef value_type &						reference;
-			typedef std::bidirectional_iterator_tag		iterator_category;
+			typedef const Key								value_type;
+			typedef std::ptrdiff_t							difference_type;
+			typedef value_type *							pointer;
+			typedef value_type &							reference;
+			typedef std::bidirectional_iterator_tag			iterator_category;
 
 		protected:
-			const node_type								*_cur;
+			typedef typename ft::RedBlackNode<Key>			node_type;
+
+		public:
+			const node_type *								_cur;
 
 		public:
 			// public member functions
-			iterator ( void );
-			iterator ( const iterator & other );
-			iterator ( const node_type * cur );
-			~iterator ( void );
+			set_iterator ( void );
+			set_iterator ( const set_iterator & other );
+			set_iterator ( const node_type * cur );
+			~set_iterator ( void );
 
-			iterator & operator = ( const iterator & other );
+			set_iterator & operator = ( const set_iterator & other );
 
-			bool operator == ( const iterator & other ) const;
-			bool operator != ( const iterator & other ) const;
+			bool operator == ( const set_iterator & other ) const;
+			bool operator != ( const set_iterator & other ) const;
 
 			value_type & operator * ( void ) const;
 			value_type * operator -> ( void ) const;
 
-			iterator & operator ++ ( void );
-			iterator operator ++ ( int n );
-			iterator & operator -- ( void );
-			iterator operator -- ( int n );
-	}; // class ft::set<Key, Compare, Allocator>::iterator;
+			set_iterator & operator ++ ( void );
+			set_iterator operator ++ ( int n );
+			set_iterator & operator -- ( void );
+			set_iterator operator -- ( int n );
+
+	}; // class set_iterator
 
 } // namespace ft
 

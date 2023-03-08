@@ -52,7 +52,7 @@ typename ft::set<Key, Compare, Allocator>::allocator_type ft::set<Key, Compare, 
 
 //		Iterators
 template < class Key, class Compare, class Allocator >
-typename ft::set<Key, Compare, Allocator>::iterator ft::set<Key, Compare, Allocator>::begin ( void )
+typename ft::set_iterator<Key> ft::set<Key, Compare, Allocator>::begin ( void )
 {
 	return iterator(this->_tree.begin());
 }
@@ -64,7 +64,7 @@ typename ft::set<Key, Compare, Allocator>::const_iterator ft::set<Key, Compare, 
 }
 
 template < class Key, class Compare, class Allocator >
-typename ft::set<Key, Compare, Allocator>::iterator ft::set<Key, Compare, Allocator>::end ( void )
+typename ft::set_iterator<Key> ft::set<Key, Compare, Allocator>::end ( void )
 {
 	return iterator(this->_tree.end());
 }
@@ -126,14 +126,14 @@ void ft::set<Key, Compare, Allocator>::clear ( void )
 }
 
 template < class Key, class Compare, class Allocator >
-ft::pair<typename ft::set<Key, Compare, Allocator>::iterator, bool> ft::set<Key, Compare, Allocator>::insert ( const value_type & value )
+ft::pair<typename ft::set_iterator<Key>, bool> ft::set<Key, Compare, Allocator>::insert ( const value_type & value )
 {
 	ft::pair<node_type *, bool> result = this->_tree.insert(value);
 	return (ft::make_pair(iterator(result.first), result.second));
 }
 
 template < class Key, class Compare, class Allocator >
-typename ft::set<Key, Compare, Allocator>::iterator ft::set<Key, Compare, Allocator>::insert ( iterator pos, const value_type & value )
+typename ft::set_iterator<Key> ft::set<Key, Compare, Allocator>::insert ( iterator pos, const value_type & value )
 {
 	(void)pos;
 	return (this->insert(value).first);
@@ -148,14 +148,14 @@ void ft::set<Key, Compare, Allocator>::insert ( InputIt first, InputIt last )
 }
 
 template < class Key, class Compare, class Allocator >
-typename ft::set<Key, Compare, Allocator>::iterator ft::set<Key, Compare, Allocator>::erase ( iterator pos )
+typename ft::set_iterator<Key> ft::set<Key, Compare, Allocator>::erase ( iterator pos )
 {
 	node_type * following = this->_tree.erase(const_cast<node_type *>(pos._cur));
 	return iterator(following);
 }
 
 template < class Key, class Compare, class Allocator >
-typename ft::set<Key, Compare, Allocator>::iterator ft::set<Key, Compare, Allocator>::erase ( iterator first, iterator last )
+typename ft::set_iterator<Key> ft::set<Key, Compare, Allocator>::erase ( iterator first, iterator last )
 {
 	iterator iter = last;
 	iter--;
@@ -194,7 +194,7 @@ typename ft::set<Key, Compare, Allocator>::size_type ft::set<Key, Compare, Alloc
 }
 
 template < class Key, class Compare, class Allocator >
-typename ft::set<Key, Compare, Allocator>::iterator ft::set<Key, Compare, Allocator>::find ( const key_type & key )
+typename ft::set_iterator<Key> ft::set<Key, Compare, Allocator>::find ( const key_type & key )
 {
 	return iterator(this->_tree.find(key));
 }
@@ -206,7 +206,7 @@ typename ft::set<Key, Compare, Allocator>::const_iterator ft::set<Key, Compare, 
 }
 
 template < class Key, class Compare, class Allocator >
-ft::pair<typename ft::set<Key, Compare, Allocator>::iterator, typename ft::set<Key, Compare, Allocator>::iterator> ft::set<Key, Compare, Allocator>::equal_range ( const key_type & key )
+ft::pair<typename ft::set_iterator<Key>, typename ft::set_iterator<Key> > ft::set<Key, Compare, Allocator>::equal_range ( const key_type & key )
 {
 	return (ft::make_pair(this->lower_bound(key), this->upper_bound(key)));
 }
@@ -218,7 +218,7 @@ ft::pair<typename ft::set<Key, Compare, Allocator>::const_iterator, typename ft:
 }
 
 template < class Key, class Compare, class Allocator >
-typename ft::set<Key, Compare, Allocator>::iterator ft::set<Key, Compare, Allocator>::lower_bound ( const key_type & key )
+typename ft::set_iterator<Key> ft::set<Key, Compare, Allocator>::lower_bound ( const key_type & key )
 {
 	return iterator(this->_tree.lower_bound(key));
 }
@@ -230,7 +230,7 @@ typename ft::set<Key, Compare, Allocator>::const_iterator ft::set<Key, Compare, 
 }
 
 template < class Key, class Compare, class Allocator >
-typename ft::set<Key, Compare, Allocator>::iterator ft::set<Key, Compare, Allocator>::upper_bound ( const key_type & key )
+typename ft::set_iterator<Key> ft::set<Key, Compare, Allocator>::upper_bound ( const key_type & key )
 {
 	return iterator(this->_tree.upper_bound(key));
 }
