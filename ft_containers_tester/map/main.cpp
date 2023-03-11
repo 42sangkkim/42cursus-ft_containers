@@ -1,5 +1,5 @@
 
-#include <cstdio>
+#include <iostream>
 #ifdef STD_TEST //CREATE A REAL STL EXAMPLE
 	#include <map>
 	namespace ft = std;
@@ -15,17 +15,17 @@ int main(void)
 	ft::map<int, int>	Q;
 
 	int T, K;
-	scanf("%d\n", &T);
+	std::cin >> T;
 	for (int t = 0; t != T; ++t)
 	{
-		scanf("%d\n", &K);
+		std::cin >> K;
 		Q.clear();
 		for (int k = 0; k != K; ++k)
 		{
-			char cmd;
+			std::string cmd;
 			int value;
-			scanf("%c %d\n", &cmd, &value);
-			switch (cmd)
+			std::cin >> cmd >> value;
+			switch (cmd[0])
 			{
 				case 'I':
 					Q[value]++;
@@ -48,9 +48,9 @@ int main(void)
 			}
 		}
 		if (Q.empty())
-			printf("EMPTY\n");
+			std::cout << "EMPTY" << std::endl;
 		else
-			printf("%d %d\n", (--Q.end())->first, Q.begin()->first);
+			std::cout << (--Q.end())->first << Q.begin()->first << std::endl;
 	}
 	return 0;
 }
