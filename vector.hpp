@@ -6,6 +6,8 @@
 # include "./enable_if.hpp"
 # include "./is_integral.hpp"
 
+# include "./vector_iterator.hpp"
+
 namespace ft
 {
 
@@ -24,8 +26,8 @@ namespace ft
 		typedef typename Allocator::const_pointer				const_pointer;
 
 		// Iterators
-		typedef T *												iterator;
-		typedef const T *										const_iterator;
+		typedef typename ft::vector_iterator<T>					iterator;
+		typedef typename ft::const_vector_iterator<T>			const_iterator;
 		typedef	typename ft::reverse_iterator<iterator>			reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
@@ -100,24 +102,16 @@ namespace ft
 
 	template < class T, class A >
 	bool operator == ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
-	
 	template < class T, class A >
 	bool operator != ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
-	
 	template < class T, class A >
 	bool operator < ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
-	
 	template < class T, class A >
 	bool operator > ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
-	
 	template < class T, class A >
 	bool operator <= ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
-	
 	template < class T, class A >
 	bool operator >= ( const ft::vector<T, A> & lhs, const ft::vector<T, A> & rhs );
-	
-	template < class T, class A >
-	void swap ( ft::vector<T, A> & lhs, ft::vector<T, A> & rhs );
 	
 } // namespace ft
 
