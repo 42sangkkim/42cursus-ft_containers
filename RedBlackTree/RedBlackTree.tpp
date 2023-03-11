@@ -218,16 +218,16 @@ ft::pair<typename ft::RedBlackNode<T> *, bool> ft::RedBlackTree<T, Compare, Allo
 			cur->child[dir] = this->_node_alloc.allocate(1);
 			this->_node_alloc.construct(cur->child[dir], node_type(value));
 			cur->child[dir]->parent = cur;
+			if (dir == LEFT && cur == this->_head->child[RIGHT]) // update first
+				this->_head->child[RIGHT] = cur->child[LEFT];
+			if (dir == RIGHT && cur == this->_head->child[LEFT]) // update last
+				this->_head->child[LEFT] = cur->child[RIGHT];
 			cur = cur->child[dir];
 			this->_size += 1;
 			break ;
 		}
 	}
 
-	if (this->_comp(cur->value, this->_head->child[RIGHT]->value)) // update first
-		this->_head->child[RIGHT] = cur;
-	if (this->_comp(this->_head->child[LEFT]->value, cur->value)) // update last
-		this->_head->child[LEFT] = cur;
 	check_double_red(cur);
 	return ft::make_pair(cur, true);
 }
