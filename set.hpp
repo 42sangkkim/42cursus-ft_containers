@@ -112,9 +112,6 @@ namespace ft
 	template < class Key, class Compare, class Allocator >
 	bool operator >= ( const ft::set<Key, Compare, Allocator> & lhs, const ft::set<Key, Compare, Allocator> & rhs );
 
-	template < class Key, class Compare, class Allocator >
-	void  swap ( ft::set<Key, Compare, Allocator> & lhs, ft::set<Key, Compare, Allocator> & rhs );
-
 } // namespace ft
 
 // # include "./set_iterator.hpp"

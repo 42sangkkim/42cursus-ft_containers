@@ -291,10 +291,13 @@ bool ft::operator >= ( const ft::set<Key, Compare, Allocator> & lhs, const ft::s
 	return !(lhs < rhs);
 }
 
-template < class Key, class Compare, class Allocator >
-void  ft::swap ( ft::set<Key, Compare, Allocator> & lhs, ft::set<Key, Compare, Allocator> & rhs )
+namespace std
 {
-	lhs.swap(rhs);
+	template < class Key, class Compare, class Allocator >
+	void  swap ( ft::set<Key, Compare, Allocator> & lhs, ft::set<Key, Compare, Allocator> & rhs )
+	{
+		lhs.swap(rhs);
+	}
 }
 
 #endif // FT_CONTAINERS_SET_TPP

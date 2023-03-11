@@ -312,12 +312,14 @@ bool ft::operator >= ( const ft::map<Key, T, Compare, Allocator> & lhs, const ft
 	return !(lhs < rhs);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-void ft::swap ( ft::map<Key, T, Compare, Allocator> & lhs, ft::map<Key, T, Compare, Allocator> & rhs )
+namespace std
 {
-	lhs.swap(rhs);
+	template < class Key, class T, class Compare, class Allocator >
+	void swap ( ft::map<Key, T, Compare, Allocator> & lhs, ft::map<Key, T, Compare, Allocator> & rhs )
+	{
+		lhs.swap(rhs);
+	}
 }
-
 
 // ft::map::value_compare
 

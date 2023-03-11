@@ -120,9 +120,6 @@ namespace ft
 	bool operator >= ( const ft::map<Key, T, Compare, Allocator> & lhs, const ft::map<Key, T, Compare, Allocator> & rhs );
 
 	template < class Key, class T, class Compare, class Allocator >
-	void swap ( ft::map<Key, T, Compare, Allocator> & lhs, ft::map<Key, T, Compare, Allocator> & rhs );
-
-	template < class Key, class T, class Compare, class Allocator >
 	class ft::map<Key, T, Compare, Allocator>::value_compare : public std::binary_function< value_type, value_type, bool >
 	{
 		friend class ft::map<Key, T, Compare, Allocator>;
