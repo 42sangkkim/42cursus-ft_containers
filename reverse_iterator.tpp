@@ -53,7 +53,7 @@ typename ft::reverse_iterator<Iter>::pointer ft::reverse_iterator<Iter>::operato
 }
 
 template < class Iter >
-typename ft::reverse_iterator<Iter>::reference ft::reverse_iterator<Iter>::operator [] ( difference_type n ) const
+typename ft::reverse_iterator<Iter>::reference ft::reverse_iterator<Iter>::operator [] ( difference_type n )
 {
 	return this->current[-n - 1];
 }
