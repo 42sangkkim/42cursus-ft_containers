@@ -25,7 +25,7 @@ template < class T, class A >
 ft::vector<T, A>::vector ( size_type count, const_reference value, const allocator_type & alloc )
 	: _data(NULL), _alloc(alloc), _size(0), _capacity(0)
 {
-	this->insert(this->begin(), count, value);
+	this->insert(iterator(this->begin()), count, value);
 }
 
 template < class T, class A >
@@ -64,7 +64,7 @@ template < class T, class A >
 void ft::vector<T, A>::assign ( size_type count, const_reference value )
 {
 	this->clear();
-	this->insert(this->begin(), count, value);
+	this->insert(const_iterator(this->_data), count, value);
 }
 
 template < class T, class A >
@@ -72,7 +72,7 @@ template < class InputIt >
 typename ft::enable_if<!ft::is_integral<InputIt>::value, void>::type ft::vector<T, A>::assign ( InputIt first, InputIt last )
 {
 	this->clear();
-	this->insert(this->begin(), first, last);
+	this->insert(const_iterator(this->_data), first, last);
 }
 
 template < class T, class A >
@@ -152,13 +152,13 @@ typename ft::vector<T, A>::const_pointer ft::vector<T, A>::data ( void ) const
 template < class T, class A >
 typename ft::vector<T, A>::iterator ft::vector<T, A>::begin ( void )
 {
-	return iterator(this->_data);
+	return this->_data;
 }
 
 template < class T, class A >
 typename ft::vector<T, A>::const_iterator ft::vector<T, A>::begin ( void ) const
 {
-	return const_iterator(this->_data);
+	return this->_data;
 }
 
 template < class T, class A >
@@ -262,36 +262,139 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::insert ( const_iterator po
 template < class T, class A >
 typename ft::vector<T, A>::iterator ft::vector<T, A>::insert ( const_iterator pos, size_type count, const_reference value )
 {
-	difference_type		idx;
-	pointer				ptr;
+	size_type			first_idx = pos - this->_data;
+	pointer				temp_data = NULL;
+	size_type			idx = 0;
 
-	idx = pos - this->_data;
-	this->reserve(this->_size + count);
-	ptr = this->_data + idx;
-	memmove(ptr + count, ptr, (this->_size - idx) * sizeof(value_type));
-	for (; count != 0 ; count--, this->_size++)
-		this->_data[idx++] = value;
-	return iterator(this->_data + idx - 1);
+	if (this->_size + count > this->_capacity)
+	{
+		size_type new_cap = this->_size + count;
+		if (new_cap > this->max_size())
+			throw std::length_error("ft::vector");
+		new_cap = new_cap >= this->_size * 2 ? new_cap : this->_size * 2;
+		new_cap = new_cap < this->max_size() ? new_cap : this->max_size();
+		try
+		{
+			temp_data = this->_alloc.allocate(new_cap);
+			memmove(temp_data, this->_data, first_idx * sizeof(value_type));
+			for (idx = first_idx; idx != first_idx + count; ++idx)
+				this->_alloc.construct(temp_data + idx, value);
+			memmove(temp_data + first_idx + count, this->_data + first_idx, (this->_size - first_idx) * sizeof(value_type));
+			for (; idx != this->_size + count; ++idx)
+				this->_alloc.construct(temp_data + idx, this->_data[idx - count]);
+			for (idx = 0; idx != this->_size; ++idx)
+				this->_alloc.destroy(this->_data + idx);
+			this->_alloc.deallocate(this->_data, this->_capacity);
+			this->_data = temp_data;
+			this->_capacity = new_cap;
+			this->_size += count;
+		}
+		catch(...)
+		{
+			if (temp_data != NULL)
+			{
+				for (difference_type rm_idx = first_idx; rm_idx < idx ; ++rm_idx)
+					this->_alloc.destroy(temp_data + rm_idx);
+				this->_alloc.deallocate(temp_data, new_cap);
+			}
+			throw ;
+		}
+	}
+	else
+	{
+		try
+		{
+			temp_data = this->_alloc.allocate(this->_capacity);
+			memmove(temp_data, this->_data, this->_size * sizeof(value_type));
+			memmove(const_cast<T *>(pos) + count, const_cast<T *>(pos), (this->_size - first_idx) * sizeof(value_type));
+			for (idx = first_idx; idx != first_idx + count; ++idx)
+				this->_alloc.construct(this->_data + idx, value);
+			this->_alloc.deallocate(temp_data, this->_capacity);
+			this->_size += count;
+		}
+		catch(...)
+		{
+			if (temp_data != NULL)
+			{
+				memmove(this->_data, temp_data, this->_capacity * sizeof(value_type));
+				this->_alloc.deallocate(temp_data, this->_capacity);
+			}
+			throw ;
+		}
+	}
+	return iterator(this->_data + first_idx + count - 1);
 }
 
 template < class T, class A >
 template < class InputIt >
 typename ft::enable_if<!ft::is_integral<InputIt>::value, typename ft::vector<T, A>::iterator>::type ft::vector<T, A>::insert ( const_iterator pos, InputIt first, InputIt last )
 {
-	size_type			count;
-	difference_type		idx;
-	pointer				ptr;
+	size_type			count = 0;
+	size_type			first_idx = pos - this->_data;
+	pointer 			temp_data = NULL;
+	size_type 			idx = 0;
 
-	count = 0;
 	for (InputIt it(first); it != last; it++)
 		count++;
-	idx = pos - this->_data;
-	this->reserve(this->_size + count);
-	ptr = this->_data + idx;
-	memmove(ptr + count, ptr, (this->_size - idx) * sizeof(value_type));
-	for (; first != last; first++, this->_size++)
-		this->_data[idx++] = value_type(*first);
-	return iterator(this->_data + idx - 1);
+	if (this->_size + count > this->_capacity)
+	{
+		size_type new_cap = this->_size + count;
+		if (new_cap > this->max_size())
+			throw std::length_error("ft::vector");
+		if (new_cap <= this->_size * 2)
+			new_cap = this->_size * 2;
+		if (new_cap > this->max_size())
+			new_cap = this->max_size();
+		try
+		{
+			temp_data = this->_alloc.allocate(new_cap);
+			memmove(temp_data, this->_data, first_idx * sizeof(value_type));
+			for (idx = first_idx; first != last; ++first, ++idx)
+				this->_alloc.construct(temp_data + idx, *first);
+			memmove(temp_data + first_idx + count, this->_data + first_idx, (this->_size - first_idx) * sizeof(value_type));
+			for (; idx != this->_size + count; ++idx)
+				this->_alloc.construct(temp_data + idx, this->_data[idx - count]);
+			for (idx = 0; idx != this->_size; ++idx)
+				this->_alloc.destroy(this->_data + idx);
+			this->_alloc.deallocate(this->_data, this->_capacity);
+			this->_data = temp_data;
+			this->_capacity = new_cap;
+			this->_size += count;
+		}
+		catch(...)
+		{
+			if (temp_data != NULL)
+			{
+				for (size_type rm_idx = first_idx; rm_idx < idx ; ++rm_idx)
+					this->_alloc.destroy(temp_data + rm_idx);
+				this->_alloc.deallocate(temp_data, new_cap);
+			}
+			throw ;
+		}
+	}
+	else
+	{
+		try
+		{
+			temp_data = this->_alloc.allocate(this->_capacity);
+			memmove(temp_data, this->_data, this->_size * sizeof(value_type));
+			memmove(const_cast<T *>(pos) + count, const_cast<T *>(pos), (this->_size - first_idx) * sizeof(value_type));
+			for (idx = first_idx; first != last; ++first, ++idx)
+				this->_alloc.construct(this->_data + idx, *first);
+			this->_alloc.deallocate(temp_data, this->_capacity);
+			this->_size += count;
+		}
+		catch(...)
+		{
+			if (temp_data != NULL)
+			{
+				memmove(this->_data, temp_data, this->_capacity * sizeof(value_type));
+				this->_alloc.deallocate(temp_data, this->_capacity);
+			}
+			throw ;
+		}
+	}
+	return iterator(this->_data + first_idx - 1);
 }
 
 template < class T, class A >
@@ -317,7 +420,8 @@ template < class T, class A >
 void ft::vector<T, A>::push_back ( const_reference value )
 {
 	this->reserve(this->_size + 1);
-	this->_data[this->_size++] = value;
+	this->_alloc.construct(this->_data + this->_size, value);
+	this->_size++;
 }
 
 template < class T, class A >
@@ -331,7 +435,7 @@ void ft::vector<T, A>::resize ( size_type count, value_type value )
 {
 	if (this->_size > count)
 	{
-		for (; this->_size != count; this->_size--)
+		for (; this->_size != count; --this->_size)
 			this->_alloc.destroy(this->_data + this->_size - 1);
 	}
 	else if (this->_size < count)
