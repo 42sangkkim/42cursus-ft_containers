@@ -224,10 +224,10 @@ void ft::vector<T, A>::reserve ( size_type new_cap )
 {
 	if (new_cap > this->max_size())
 		throw std::length_error("ft:vector");
-	else if (new_cap <= this->_capacity)
+	if (new_cap <= this->_capacity)
 		return ;
-	else if (new_cap <= this->_size * 2)
-		new_cap = this->_size * 2;
+	if (new_cap <= this->_capacity * 2)
+		new_cap = this->_capacity * 2;
 	if (new_cap > this->max_size())
 		new_cap = this->max_size();
 
@@ -271,7 +271,7 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::insert ( const_iterator po
 		size_type new_cap = this->_size + count;
 		if (new_cap > this->max_size())
 			throw std::length_error("ft::vector");
-		new_cap = new_cap >= this->_size * 2 ? new_cap : this->_size * 2;
+		new_cap = new_cap >= this->_capacity * 2 ? new_cap : this->_capacity * 2;
 		new_cap = new_cap < this->max_size() ? new_cap : this->max_size();
 		try
 		{
@@ -341,8 +341,8 @@ typename ft::enable_if<!ft::is_integral<InputIt>::value, typename ft::vector<T, 
 		size_type new_cap = this->_size + count;
 		if (new_cap > this->max_size())
 			throw std::length_error("ft::vector");
-		if (new_cap <= this->_size * 2)
-			new_cap = this->_size * 2;
+		if (new_cap <= this->_capacity * 2)
+			new_cap = this->_capacity * 2;
 		if (new_cap > this->max_size())
 			new_cap = this->max_size();
 		try
