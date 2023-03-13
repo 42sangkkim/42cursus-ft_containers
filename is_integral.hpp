@@ -4,7 +4,14 @@
 namespace ft
 {
 	template < class T >
-	struct is_integral { static const bool value = false; };
+	struct is_integral {
+		typedef bool				value_type;
+
+		static const value_type value = false;
+
+		operator bool ( void ) const { return value; }
+		bool operator () ( void ) const { return value; }
+	};
 
 	template < class T >
 	struct is_integral < const T > { static const bool value = ft::is_integral<T>::value; };
